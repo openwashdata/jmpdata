@@ -4,19 +4,24 @@ Generated on 2026-08-20 by `R/update/06_diff_report.R` ([issue #5](https://githu
 
 ## Snapshot inventory
 
-| release | pipeline | pull_date | path | available |
-|---|---|---|---|---|
-| jmp2017 | indicators |  | data/derived_data/jmp2017_jmp_washdata_indicators.csv    | no  |
-| jmp2019 | indicators |  | data/derived_data/jmp2019_jmp_washdata_indicators.csv    | no  |
-| jmp2021 | indicators | 2022-10-19 | data/derived_data/jmp-washdata-indicators.csv            | yes |
-| jmp2023 | indicators |  | data/derived_data/jmp2023_jmp_washdata_indicators.csv    | no  |
-| jmp2025 | indicators |  | data/derived_data/jmp2025_jmp_washdata_indicators.csv    | no  |
-| jmp2019 | raw        | 2020-09-30 | data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds | yes |
-| jmp2021 | raw        | 2022-10-19 | data/derived_data/2022-10-19_jmp_sanitation_raw_data.csv | yes |
-| jmp2023 | raw        |  | data/derived_data/jmp2023_jmp_sanitation_raw_data.csv    | no  |
-| jmp2025 | raw        |  | data/derived_data/jmp2025_jmp_sanitation_raw_data.csv    | no  |
+| release_id | pipeline | snapshot_date | file | source | available | notes |
+|---|---|---|---|---|---|---|
+| jmp2017 | indicators |  | data/derived_data/jmp2017_jmp_washdata_indicators.csv       |  | no  |  |
+| jmp2019 | indicators | 2020-09-03 | data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz | git-history | yes | tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2019/WLD.xlsx |
+| jmp2021 | indicators | 2022-10-19 | data/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz | live        | yes | jmp2021 indicators baseline; dated gzip copy of the file at commit 782603b   |
+| jmp2021 | indicators | 2022-10-19 | data/derived_data/jmp-washdata-indicators.csv               | live        | yes | alias: undated latest, overwritten by each release                           |
+| jmp2023 | indicators |  | data/derived_data/jmp2023_jmp_washdata_indicators.csv       |  | no  |  |
+| jmp2025 | indicators |  | data/derived_data/jmp2025_jmp_washdata_indicators.csv       |  | no  |  |
+| jmp2019 | raw        | 2020-09-03 | data/derived_data/2020-09-03_jmp_sanitation_raw_data.rds    | live        | yes | superseded by the 2020-09-30 pull                                            |
+| jmp2019 | raw        | 2020-09-30 | data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds    | live        | yes | jmp2019-era raw baseline, as served 2020-09                                  |
+| jmp2021 | raw        | 2022-10-18 | data/derived_data/2022-10-18_jmp_sanitation_raw_data.csv    | live        | yes | duplicate of the 2022-10-19 csv (byte-identical)                             |
+| jmp2021 | raw        | 2022-10-18 | data/derived_data/2022-10-18_jmp_sanitation_raw_data.rds    | live        | yes | duplicate of the 2022-10-19 rds (byte-identical)                             |
+| jmp2021 | raw        | 2022-10-19 | data/derived_data/2022-10-19_jmp_sanitation_raw_data.csv    | live        | yes | jmp2021 raw baseline                                                         |
+| jmp2021 | raw        | 2022-10-19 | data/derived_data/2022-10-19_jmp_sanitation_raw_data.rds    | live        | yes | alias of the 2022-10-19 csv (same data, rds format)                          |
+| jmp2023 | raw        |  | data/derived_data/jmp2023_jmp_sanitation_raw_data.csv       |  | no  |  |
+| jmp2025 | raw        |  | data/derived_data/jmp2025_jmp_sanitation_raw_data.csv       |  | no  |  |
 
-Not yet available: jmp2017 (indicators), jmp2019 (indicators), jmp2023 (indicators), jmp2025 (indicators), jmp2023 (raw), jmp2025 (raw). Recovery of historic releases is tracked in issue #2, the fresh jmp2025 download in issue #4, and the snapshot registry in issue #1.
+Not yet available: jmp2017 (indicators), jmp2023 (indicators), jmp2025 (indicators), jmp2023 (raw), jmp2025 (raw). Recovery of historic releases is tracked in issue #2, the fresh jmp2025 download in issue #4, and the snapshot registry in issue #1.
 
 ## Raw survey data (sanitation)
 
@@ -78,7 +83,37 @@ Compared on the identity key `iso3 + source + type + year + var_short`: **4,906 
 
 ## Modelled indicator estimates
 
-Fewer than two indicators snapshots are available (currently: jmp2021), so there is no consecutive release pair to diff yet. See the snapshot inventory above and issues #1, #2 and #4.
+### jmp2019 vs jmp2021 (indicator estimates)
+
+Old snapshot: jmp2019 (pulled 2020-09-03, 288,144 data points). New snapshot: jmp2021 (pulled 2022-10-19, 339,066 data points).
+
+Compared on the identity key `iso3 + year + residence + var_short + indicator_type`: **50,922 added**, 0 removed, 134,201 changed, 153,943 unchanged.
+
+#### Data points by estimate year
+
+| year | n_added | n_removed | n_changed | n_unchanged |
+|---|---|---|---|---|
+| 2000 | 138 | 0 | 6902 | 9106 |
+| 2001 | 138 | 0 | 7039 | 8969 |
+| 2002 | 138 | 0 | 7082 | 8926 |
+| 2003 | 138 | 0 | 7072 | 8936 |
+| 2004 | 138 | 0 | 7138 | 8870 |
+| 2005 | 138 | 0 | 7240 | 8768 |
+| 2006 | 138 | 0 | 7376 | 8632 |
+| 2007 | 138 | 0 | 7406 | 8602 |
+| 2008 | 138 | 0 | 7495 | 8513 |
+| 2009 | 138 | 0 | 7534 | 8474 |
+| 2010 | 138 | 0 | 7630 | 8378 |
+| 2011 | 138 | 0 | 7748 | 8260 |
+| 2012 | 138 | 0 | 7781 | 8227 |
+| 2013 | 138 | 0 | 7816 | 8192 |
+| 2014 | 138 | 0 | 7802 | 8206 |
+| 2015 | 138 | 0 | 7822 | 8186 |
+| 2016 | 138 | 0 | 7724 | 8284 |
+| 2017 | 138 | 0 | 7594 | 8414 |
+| 2018 | 16146 | 0 | 0 | 0 |
+| 2019 | 16146 | 0 | 0 | 0 |
+| 2020 | 16146 | 0 | 0 | 0 |
 
 ## Caveats
 

@@ -46,6 +46,9 @@ po/*~
 
 # data dirs
 data/raw_data/country_files/*
+# per-release raw xlsx inputs stay out of git (issue #1); the committed
+# WLD.xlsx / UGA.xlsx are the only surviving JMP-2021-era raw inputs
+data/raw_data/snapshots/
 
 # Mac files
 

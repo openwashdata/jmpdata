@@ -44,9 +44,12 @@ message("Tidying indicators for ", params$release_id,
 ## sheets by name, never by position (legacy used indices 3/5/7); openxlsx
 ## as in the legacy script so column types are guessed identically
 
-jmp_world_wat <- read_jmp_sheet(wld_path, "wat", reader = "openxlsx")
-jmp_world_san <- read_jmp_sheet(wld_path, "san", reader = "openxlsx")
-jmp_world_hyg <- read_jmp_sheet(wld_path, "hyg", reader = "openxlsx")
+jmp_world_wat <- read_jmp_sheet(wld_path, c("wat", "Water Data"),
+                                reader = "openxlsx")
+jmp_world_san <- read_jmp_sheet(wld_path, c("san", "Sanitation Data"),
+                                reader = "openxlsx")
+jmp_world_hyg <- read_jmp_sheet(wld_path, c("hyg", "Hygiene Data"),
+                                reader = "openxlsx")
 
 ## hand-curated variable names, maintained in the repo
 jmp_vars <- read_csv(
@@ -61,16 +64,23 @@ jmp_vars <- read_csv(
 
 ## keep the identifying columns plus every numeric indicator column; this
 ## drops the character region_* columns exactly like the legacy
-## select(name, iso3, where(is.double))
+## select(name, iso3, where(is.double)). The 2020-era world file carries
+## numeric helper columns (year2, pop_n2) that are not indicators; the
+## 2022 file does not have them, so any_of() is a no-op there.
+
+helper_cols <- c("year2", "pop_n2")
 
 jmp_world_wat_join <- jmp_world_wat |>
-    select(name, iso3, where(is.double))
+    select(name, iso3, where(is.double)) |>
+    select(-any_of(helper_cols))
 
 jmp_world_san_join <- jmp_world_san |>
-    select(name, iso3, where(is.double))
+    select(name, iso3, where(is.double)) |>
+    select(-any_of(helper_cols))
 
 jmp_world_hyg_join <- jmp_world_hyg |>
-    select(name, iso3, where(is.double))
+    select(name, iso3, where(is.double)) |>
+    select(-any_of(helper_cols))
 
 ## the three sheets share these columns; joining on all of them explicitly
 ## replaces the legacy natural join
@@ -92,7 +102,7 @@ jmp_world_tidy <- jmp_world_wat_join |>
     ## wat_bas_n:hyg_nfac_u, so new columns cannot silently fall outside
     pivot_longer(
         cols = starts_with(c("wat_", "san_", "hyg_", "arc_")) &
-            !all_of(id_cols),
+            !any_of(id_cols),
         names_to = "var_short",
         values_to = "percent"
     ) |>
@@ -190,17 +200,21 @@ jmp_world_tidy_enriched <- jmp_world_tidy_san |>
 
 # export -------------------------------------------------------------------
 
-indicators_file <- paste0(params$pull_date, "_jmp_washdata_indicators.csv")
+indicators_file <- paste0(params$pull_date, "_jmp_washdata_indicators.csv",
+                          if (params$compress) ".gz" else "")
 
 write_csv(jmp_world_tidy_enriched,
           file.path(params$output_dir, indicators_file))
 
 append_manifest_row(
     manifest_path = file.path(params$output_dir, "snapshots_manifest.csv"),
-    release = params$release_id,
+    release_id = params$release_id,
     pipeline = "indicators",
-    pull_date = params$pull_date,
-    path = file.path(params$output_dir_label, indicators_file)
+    snapshot_date = params$pull_date,
+    file = file.path(params$output_dir_label, indicators_file),
+    source = params$source,
+    notes = paste0("tidied by 04_tidy_indicators.R from ",
+                   params$snapshot_dir_label, "/WLD.xlsx")
 )
 
 message("Written: ", file.path(params$output_dir, indicators_file))

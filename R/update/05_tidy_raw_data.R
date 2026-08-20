@@ -49,7 +49,8 @@ message("Tidying raw data for ", params$release_id,
 ## instead of the legacy hardcoded BLM/MAF exclusion, process the countries
 ## whose file exists and warn about the rest
 
-country_codes <- read_jmp_sheet(wld_path, "wat", reader = "readxl") |>
+country_codes <- read_jmp_sheet(wld_path, c("wat", "Water Data"),
+                                reader = "readxl") |>
     select(iso3, name) |>
     unique()
 
@@ -183,21 +184,24 @@ jmp_sanitation_raw_data <- country_list |>
     left_join(var_list_san, by = "var_short")
 
 raw_file_stem <- paste0(params$pull_date, "_jmp_sanitation_raw_data")
+raw_csv <- paste0(raw_file_stem, ".csv", if (params$compress) ".gz" else "")
 
 jmp_sanitation_raw_data |>
     write_rds(file.path(params$output_dir,
                         paste0(raw_file_stem, ".rds")))
 
 jmp_sanitation_raw_data |>
-    write_csv(file.path(params$output_dir,
-                        paste0(raw_file_stem, ".csv")))
+    write_csv(file.path(params$output_dir, raw_csv))
 
 append_manifest_row(
     manifest_path = file.path(params$output_dir, "snapshots_manifest.csv"),
-    release = params$release_id,
+    release_id = params$release_id,
     pipeline = "raw",
-    pull_date = params$pull_date,
-    path = file.path(params$output_dir_label, paste0(raw_file_stem, ".csv"))
+    snapshot_date = params$pull_date,
+    file = file.path(params$output_dir_label, raw_csv),
+    source = params$source,
+    notes = paste0("tidied by 05_tidy_raw_data.R from ",
+                   params$snapshot_dir_label, "/country_files")
 )
 
 message("Written: ",

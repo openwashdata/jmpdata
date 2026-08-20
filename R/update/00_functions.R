@@ -134,9 +134,16 @@ jmp_update_params <- function() {
     list(
         release_id = release_id,
         snapshot_dir = resolve(snapshot_dir),
+        snapshot_dir_label = snapshot_dir,
         output_dir = resolve(output_dir),
         output_dir_label = output_dir,
-        pull_date = Sys.getenv("JMP_PULL_DATE", as.character(Sys.Date()))
+        pull_date = Sys.getenv("JMP_PULL_DATE", as.character(Sys.Date())),
+        ## provenance of the raw input, recorded in the manifest:
+        ## live | wayback | git-history | jmpwashdata
+        source = Sys.getenv("JMP_SOURCE", "live"),
+        ## write dated outputs as .csv.gz (used for the large indicator
+        ## snapshots that get committed)
+        compress = tolower(Sys.getenv("JMP_OUTPUT_COMPRESS", "false")) == "true"
     )
 }
 
@@ -144,10 +151,13 @@ jmp_update_params <- function() {
 
 ## Read one sheet from a JMP Excel file by name, never by position: the
 ## positional indices 3/5/7 of the legacy scripts would silently break if
-## JMP reorders sheets. The reader argument preserves the exact reader the
-## legacy pipeline used (openxlsx for the world file, readxl for country
-## files), because the two guess column types differently and the outputs
-## must stay comparable.
+## JMP reorders sheets. sheet_name can be a vector of candidates because
+## JMP renamed the data sheets between releases (2020 world file: "Water
+## Data" / "Sanitation Data" / "Hygiene Data"; 2022 world file: "wat" /
+## "san" / "hyg"); the first candidate present is used. The reader
+## argument preserves the exact reader the legacy pipeline used (openxlsx
+## for the world file, readxl for country files), because the two guess
+## column types differently and the outputs must stay comparable.
 
 read_jmp_sheet <- function(path, sheet_name,
                            reader = c("openxlsx", "readxl"), ...) {
@@ -160,16 +170,20 @@ read_jmp_sheet <- function(path, sheet_name,
         readxl::excel_sheets(path)
     }
 
-    if (!sheet_name %in% sheets) {
-        stop("Sheet '", sheet_name, "' not found in ", basename(path),
+    matched <- intersect(sheet_name, sheets)
+
+    if (length(matched) == 0) {
+        stop("None of the sheet(s) ",
+             paste0("'", sheet_name, "'", collapse = ", "),
+             " found in ", basename(path),
              ". Available sheets: ", paste(sheets, collapse = ", "),
              call. = FALSE)
     }
 
     if (reader == "openxlsx") {
-        as_tibble(openxlsx::read.xlsx(path, sheet = sheet_name, ...))
+        as_tibble(openxlsx::read.xlsx(path, sheet = matched[1], ...))
     } else {
-        readxl::read_excel(path, sheet = sheet_name, ...)
+        readxl::read_excel(path, sheet = matched[1], ...)
     }
 }
 
@@ -209,32 +223,38 @@ join_jmp_vars <- function(data, lookup,
 
 # snapshot manifest --------------------------------------------------------
 
-## Record a tidied snapshot in the manifest that 06_diff_report.R consumes.
-## One row per release and pipeline; re-tidying a release replaces its row.
+## Record a snapshot in the registry that 06_diff_report.R consumes.
+## Schema per issue #1: release_id, snapshot_date, pipeline, file, source
+## (live | wayback | git-history | jmpwashdata), notes. One row per file;
+## re-registering a file replaces its row, so seeding and re-tidying are
+## idempotent. Rows whose notes start with "duplicate", "alias" or
+## "superseded" are listed in the inventory but excluded from diff chains.
 
-append_manifest_row <- function(manifest_path, release, pipeline,
-                                pull_date, path) {
+append_manifest_row <- function(manifest_path, release_id, pipeline,
+                                snapshot_date, file, source = "live",
+                                notes = NA_character_) {
 
     new_row <- tibble(
-        release = release,
+        release_id = release_id,
+        snapshot_date = as.character(snapshot_date),
         pipeline = pipeline,
-        pull_date = as.character(pull_date),
-        path = path
+        file = file,
+        source = source,
+        notes = notes
     )
 
     manifest <- if (file.exists(manifest_path)) {
         read_csv(manifest_path, show_col_types = FALSE,
-                 col_types = "cccc") |>
-            filter(!(.data$release == .env$release &
-                         .data$pipeline == .env$pipeline)) |>
+                 col_types = "cccccc") |>
+            filter(.data$file != .env$file) |>
             bind_rows(new_row)
     } else {
         new_row
     }
 
     manifest |>
-        arrange(pipeline, release) |>
-        write_csv(manifest_path)
+        arrange(pipeline, release_id, snapshot_date, file) |>
+        write_csv(manifest_path, na = "")
 
     invisible(manifest)
 }
