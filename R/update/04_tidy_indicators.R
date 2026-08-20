@@ -64,11 +64,11 @@ jmp_vars <- read_csv(
 
 ## keep the identifying columns plus every numeric indicator column; this
 ## drops the character region_* columns exactly like the legacy
-## select(name, iso3, where(is.double)). The 2020-era world file carries
-## numeric helper columns (year2, pop_n2) that are not indicators; the
-## 2022 file does not have them, so any_of() is a no-op there.
+## select(name, iso3, where(is.double)). The 2020- and 2025-era world
+## files carry numeric helper columns that are not indicators; the 2022
+## file has none of them, so any_of() is a no-op there.
 
-helper_cols <- c("year2", "pop_n2")
+helper_cols <- c("year2", "pop_n2", "blank", "latestyear")
 
 jmp_world_wat_join <- jmp_world_wat |>
     select(name, iso3, where(is.double)) |>
@@ -82,15 +82,21 @@ jmp_world_hyg_join <- jmp_world_hyg |>
     select(name, iso3, where(is.double)) |>
     select(-any_of(helper_cols))
 
-## the three sheets share these columns; joining on all of them explicitly
-## replaces the legacy natural join
+## the three sheets share the identifying columns; computing the join key
+## as their intersection replaces the legacy natural join and absorbs the
+## population column rename (pop_n through 2022, pop_t from 2025)
 
-join_cols <- c("name", "iso3", "year", "pop_n", "prop_u", "sl")
+join_cols <- Reduce(intersect, list(
+    names(jmp_world_wat_join),
+    names(jmp_world_san_join),
+    names(jmp_world_hyg_join)
+))
 
 ## id columns that stay wide when the indicator columns are gathered;
 ## arc_hyg_bas_u is the preserved legacy accident described in the header
 
-id_cols <- c("name", "iso3", "year", "pop_n", "prop_u", "arc_hyg_bas_u")
+id_cols <- c("name", "iso3", "year", "pop_n", "pop_t", "prop_u",
+             "arc_hyg_bas_u")
 
 jmp_world_tidy <- jmp_world_wat_join |>
     left_join(jmp_world_san_join, by = join_cols) |>

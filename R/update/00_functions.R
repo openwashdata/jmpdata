@@ -211,6 +211,22 @@ join_jmp_vars <- function(data, lookup,
             output_dir, paste0(pull_date, "_unmatched_variables.csv")
         )
         write_csv(unmatched, unmatched_path)
+
+        n_vars <- n_distinct(data$var_short)
+
+        ## a few unknown variables are expected in a new release; a lookup
+        ## that knows less than half the file signals a vocabulary change
+        ## that needs hand-curation, not a quietly gutted output
+        if (nrow(unmatched) > n_vars / 2) {
+            stop("The variable lookup knows only ",
+                 n_vars - nrow(unmatched), " of ", n_vars,
+                 " var_short values in this snapshot; the release ",
+                 "vocabulary has changed. Unmatched list written to ",
+                 unmatched_path, ". Hand-extend ",
+                 "data/derived_data/jmp_wash_variables_complete.csv and ",
+                 "re-run.", call. = FALSE)
+        }
+
         warning(nrow(unmatched), " var_short value(s) not in the variable ",
                 "lookup were dropped; written to ", unmatched_path,
                 ". Extend data/derived_data/jmp_wash_variables_complete.csv ",
@@ -227,8 +243,10 @@ join_jmp_vars <- function(data, lookup,
 ## Schema per issue #1: release_id, snapshot_date, pipeline, file, source
 ## (live | wayback | git-history | jmpwashdata), notes. One row per file;
 ## re-registering a file replaces its row, so seeding and re-tidying are
-## idempotent. Rows whose notes start with "duplicate", "alias" or
-## "superseded" are listed in the inventory but excluded from diff chains.
+## idempotent. Rows whose notes start with "duplicate", "alias",
+## "superseded" or "input" are listed in the inventory but excluded from
+## diff chains ("input" registers downloaded raw xlsx, which is tidied by
+## 04/05 before it can be diffed).
 
 append_manifest_row <- function(manifest_path, release_id, pipeline,
                                 snapshot_date, file, source = "live",
@@ -259,6 +277,48 @@ append_manifest_row <- function(manifest_path, release_id, pipeline,
     invisible(manifest)
 }
 
+# downloads ----------------------------------------------------------------
+
+## Download one washdata.org country file (or the world file with
+## iso3 = "WLD"). Wrapped in tryCatch so one failing country never aborts
+## a ~230-file run; the caller collects failures into a log. Bad downloads
+## (HTML error pages served instead of xlsx) are detected via the zip
+## magic bytes and removed. Returns "ok" or a short failure reason.
+
+download_jmp_country <- function(iso3, dest,
+                                 base_url = "https://washdata.org/data/country") {
+
+    url <- paste0(base_url, "/", iso3, "/download")
+
+    status <- tryCatch(
+        suppressWarnings(download.file(url, destfile = dest, mode = "wb",
+                                       quiet = TRUE)),
+        error = \(e) -1L
+    )
+
+    if (!identical(status, 0L)) {
+        if (file.exists(dest)) unlink(dest)
+        return("download failed")
+    }
+
+    if (!is_xlsx(dest)) {
+        unlink(dest)
+        return("not an xlsx file (server returned an error page)")
+    }
+
+    "ok"
+}
+
+## An xlsx file is a zip archive; checking the magic bytes catches HTML
+## error pages saved under an .xlsx name.
+
+is_xlsx <- function(path) {
+    file.exists(path) &&
+        file.size(path) > 4 &&
+        identical(readBin(path, "raw", 4),
+                  as.raw(c(0x50, 0x4b, 0x03, 0x04)))
+}
+
 # snapshot readers --------------------------------------------------------
 
 ## Transparent reader for tidy snapshot files: the 2020 baseline exists
@@ -286,13 +346,38 @@ read_snapshot <- function(path) {
 ##
 ## The identity key is not stable across releases without normalization:
 ## the 2020-09-30 pull suffixes sources with a two-digit publication year
-## ("CEN00") which the 2022-10-19 pull drops ("CEN"), and the old "Survey"
-## type was split into "Survey" and "Survey with microdata". Without
-## normalization not a single key matches across those two releases.
-## normalize = TRUE strips the suffix and collapses the type split. Where
-## two source editions collapse onto the same key with conflicting values
-## (Poland "ES12"/"ES13"), the newest edition is kept and a message
-## reports how many rows were dropped.
+## ("CEN00") which the 2022-10-19 pull drops ("CEN"), the old "Survey"
+## type was split into "Survey" and "Survey with microdata", the 2025
+## release localizes type labels into the country language ("Encuesta con
+## microdatos", "Перепись населения"), renames the national suffix _n to
+## _t (total) and renames open defecation s_od_* to s_ns_* ("no service";
+## verified value-identical on matched keys). Without normalization not a
+## single key matches across releases. normalize = TRUE maps everything
+## onto the legacy canonical vocabulary (English types, _n suffix, s_od).
+## Where two source editions collapse onto the same key with conflicting
+## values (Poland "ES12"/"ES13"), the newest edition is kept and a
+## message reports how many rows were dropped.
+
+jmp_type_map <- c(
+    "Survey with microdata" = "Survey",
+    "Encuesta" = "Survey",
+    "Encuesta con microdatos" = "Survey",
+    "Enquête" = "Survey",
+    "Enquête avec microdonnées" = "Survey",
+    "Обследование" = "Survey",
+    "Обследование с микроданными" = "Survey",
+    "الدراسة الاستقصائية" = "Survey",
+    "المسح باستخدام البيانات الجزئية" = "Survey",
+    "Censo" = "Census",
+    "Recensement" = "Census",
+    "Перепись населения" = "Census",
+    "التعداد" = "Census",
+    "Autre" = "Other",
+    "Otro" = "Other",
+    "آخر" = "Other",
+    "Административная отчётность" = "Admin",
+    "مصدر إداري" = "Admin"
+)
 
 read_raw_snapshot <- function(path, normalize = TRUE) {
 
@@ -316,7 +401,9 @@ read_raw_snapshot <- function(path, normalize = TRUE) {
         mutate(
             source_edition = source,
             source = str_remove(source, "[0-9]+$"),
-            type = if_else(type == "Survey with microdata", "Survey", type)
+            type = coalesce(unname(jmp_type_map[type]), type),
+            var_short = str_replace(var_short, "_t$", "_n"),
+            var_short = str_replace(var_short, "^s_ns_", "s_od_")
         ) |>
         arrange(desc(source_edition)) |>
         distinct(iso3, source, type, year, var_short, .keep_all = TRUE) |>

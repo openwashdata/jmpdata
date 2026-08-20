@@ -105,10 +105,15 @@ var_list_san <- var_list |>
     filter(str_starts(var_short, "s_")) |>
     select(var_short, var_long) |>
     arrange(var_short) |>
+    ## the unanchored _n/_r/_u detection reproduces the legacy labels,
+    ## including their quirks (s_sep_nemp_r is "national" in the committed
+    ## 2022 output); the _t line is appended for the 2025 vocabulary where
+    ## _t (total) replaced _n, and changes nothing for older releases
     mutate(residence = case_when(
         str_detect(var_short, "_n") ~ "national",
         str_detect(var_short, "_r") ~ "rural",
-        str_detect(var_short, "_u") ~ "urban"
+        str_detect(var_short, "_u") ~ "urban",
+        str_detect(var_short, "_t") ~ "national"
     )) |>
     mutate(san_service_chain = case_when(
         str_detect(var_short, "od") ~ "open defecation",
@@ -124,7 +129,10 @@ var_list_san <- var_list |>
         str_detect(var_short, "treat_fstp") ~ "FS treatment",
         str_detect(var_short, "treat_wtp") ~ "WW treatment",
         str_detect(var_short, "^s_sep|^s_lat|^s_sew") ~ "user interface",
-        str_detect(var_short, "shared") ~ "sharing"
+        str_detect(var_short, "shared") ~ "sharing",
+
+        # 2025 vocabulary: s_ns_* ("no service") replaced s_od_*
+        str_detect(var_short, "_ns") ~ "open defecation"
     )) |>
     mutate(san_service_chain = factor(san_service_chain,
                                       levels = ssc_levels))

@@ -28,8 +28,8 @@ indicator_key <- c("iso3", "year", "residence", "var_short", "indicator_type")
 ## source of truth. The built-in rows below fill in releases the manifest
 ## does not know yet, so unavailable releases stay visible in the
 ## inventory. One row per file; rows whose notes start with "duplicate",
-## "alias" or "superseded" are listed in the inventory but excluded from
-## diff chains.
+## "alias", "superseded" or "input" (downloaded raw xlsx, not yet tidied)
+## are listed in the inventory but excluded from diff chains.
 
 manifest_path <- here::here("data/derived_data/snapshots_manifest.csv")
 
@@ -62,12 +62,22 @@ file_manifest <- if (file.exists(manifest_path)) {
     NULL
 }
 
-manifest <- bind_rows(file_manifest, builtin_manifest) |>
+## built-in placeholder rows only fill in release/pipeline combinations
+## the manifest does not cover at all
+
+builtin_keep <- if (is.null(file_manifest)) {
+    builtin_manifest
+} else {
+    anti_join(builtin_manifest, file_manifest,
+              by = c("release_id", "pipeline"))
+}
+
+manifest <- bind_rows(file_manifest, builtin_keep) |>
     distinct(file, .keep_all = TRUE) |>
     mutate(
         available = file.exists(here::here(file)),
         excluded = !is.na(notes) &
-            str_detect(notes, "^(duplicate|alias|superseded)"),
+            str_detect(notes, "^(duplicate|alias|superseded|input)"),
         release_id = factor(release_id, levels = release_order)
     ) |>
     arrange(pipeline, release_id, snapshot_date)
@@ -310,14 +320,17 @@ lines <- c(
         "release add\"."
     ),
     paste0(
-        "- Source labels are normalized before diffing: the 2020-09-30 pull ",
+        "- Raw snapshots are normalized before diffing: the 2020-09-30 pull ",
         "suffixes sources with a two-digit publication year (\"CEN00\") which ",
-        "later pulls drop (\"CEN\"), so trailing digits are stripped, and the ",
-        "type \"Survey with microdata\" (introduced after the 2020 pull) is ",
-        "collapsed into \"Survey\". Without this normalization not a single ",
-        "identity key matches across the two committed releases. Source ",
-        "renames that go beyond the suffix still appear as a paired `added` ",
-        "and `removed` row."
+        "later pulls drop (\"CEN\"), so trailing digits are stripped; type ",
+        "labels are mapped to English base categories (the 2022 pull split ",
+        "\"Survey with microdata\" out of \"Survey\", the 2025 release ",
+        "localizes types into the country language); and the 2025 variable ",
+        "renames are mapped back to the legacy vocabulary (suffix _t to _n, ",
+        "s_ns_* to s_od_*, verified value-identical on matched keys). ",
+        "Without this normalization not a single identity key matches ",
+        "across releases. Renames that go beyond these rules still appear ",
+        "as a paired `added` and `removed` row."
     ),
     paste0(
         "- Where two source editions collapse onto one normalized key with ",
