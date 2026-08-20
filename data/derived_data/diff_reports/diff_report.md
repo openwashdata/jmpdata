@@ -6,23 +6,23 @@ Generated on 2026-08-20 by `R/update/06_diff_report.R` ([issue #5](https://githu
 
 | release_id | pipeline | snapshot_date | file | source | available | notes |
 |---|---|---|---|---|---|---|
-| jmp2017 | indicators |  | data/derived_data/jmp2017_jmp_washdata_indicators.csv       |  | no  |  |
-| jmp2019 | indicators | 2020-09-03 | data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz | git-history | yes | tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2019/WLD.xlsx    |
-| jmp2021 | indicators | 2022-10-19 | data/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz | live        | yes | jmp2021 indicators baseline; dated gzip copy of the file at commit 782603b      |
-| jmp2021 | indicators | 2022-10-19 | data/derived_data/jmp-washdata-indicators.csv               | live        | yes | alias: undated latest, overwritten by each release                              |
-| jmp2023 | indicators |  | data/derived_data/jmp2023_jmp_washdata_indicators.csv       |  | no  |  |
-| jmp2025 | indicators | 2026-08-20 | data/raw_data/snapshots/jmp2025/WLD.xlsx                    | live        | yes | input: world file, max estimate year 2024; tidy with 04_tidy_indicators.R       |
-| jmp2019 | raw        | 2020-09-03 | data/derived_data/2020-09-03_jmp_sanitation_raw_data.rds    | live        | yes | superseded by the 2020-09-30 pull                                               |
-| jmp2019 | raw        | 2020-09-30 | data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds    | live        | yes | jmp2019-era raw baseline, as served 2020-09                                     |
-| jmp2021 | raw        | 2022-10-18 | data/derived_data/2022-10-18_jmp_sanitation_raw_data.csv    | live        | yes | duplicate of the 2022-10-19 csv (byte-identical)                                |
-| jmp2021 | raw        | 2022-10-18 | data/derived_data/2022-10-18_jmp_sanitation_raw_data.rds    | live        | yes | duplicate of the 2022-10-19 rds (byte-identical)                                |
-| jmp2021 | raw        | 2022-10-19 | data/derived_data/2022-10-19_jmp_sanitation_raw_data.csv    | live        | yes | jmp2021 raw baseline                                                            |
-| jmp2021 | raw        | 2022-10-19 | data/derived_data/2022-10-19_jmp_sanitation_raw_data.rds    | live        | yes | alias of the 2022-10-19 csv (same data, rds format)                             |
-| jmp2023 | raw        |  | data/derived_data/jmp2023_jmp_sanitation_raw_data.csv       |  | no  |  |
-| jmp2025 | raw        | 2026-08-20 | data/derived_data/2026-08-20_jmp_sanitation_raw_data.csv    | live        | yes | tidied by 05_tidy_raw_data.R from data/raw_data/snapshots/jmp2025/country_files |
-| jmp2025 | raw        | 2026-08-20 | data/raw_data/snapshots/jmp2025/country_files               | live        | yes | input: 232 country files, 0 failed; tidy with 05_tidy_raw_data.R                |
+| jmp2017 | indicators |  | data/raw_data/snapshots/jmp2017/WLD.xlsx                    | wayback     | no  | input: not recovered; no Wayback captures of the world file URL between 20170712 and 20190617                                                                  |
+| jmp2019 | indicators | 2020-09-03 | data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz | git-history | yes | tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2019/WLD.xlsx                                                                                   |
+| jmp2021 | indicators | 2022-10-19 | data/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz | live        | yes | jmp2021 indicators baseline; dated gzip copy of the file at commit 782603b                                                                                     |
+| jmp2021 | indicators | 2022-10-19 | data/derived_data/jmp-washdata-indicators.csv               | live        | yes | alias: undated latest, overwritten by each release                                                                                                             |
+| jmp2023 | indicators | 2024-05-20 | data/raw_data/snapshots/jmp2023/WLD.xlsx                    | wayback     | yes | input: world file from Wayback capture 20240520144514 of http://washdata.org/data/country/WLD/download, max estimate year 2022; tidy with 04_tidy_indicators.R |
+| jmp2025 | indicators | 2026-08-20 | data/raw_data/snapshots/jmp2025/WLD.xlsx                    | live        | yes | input: world file, max estimate year 2024; tidy with 04_tidy_indicators.R                                                                                      |
+| jmp2019 | raw        | 2020-09-03 | data/derived_data/2020-09-03_jmp_sanitation_raw_data.rds    | live        | yes | superseded by the 2020-09-30 pull                                                                                                                              |
+| jmp2019 | raw        | 2020-09-30 | data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds    | live        | yes | jmp2019-era raw baseline, as served 2020-09                                                                                                                    |
+| jmp2021 | raw        | 2022-10-18 | data/derived_data/2022-10-18_jmp_sanitation_raw_data.csv    | live        | yes | duplicate of the 2022-10-19 csv (byte-identical)                                                                                                               |
+| jmp2021 | raw        | 2022-10-18 | data/derived_data/2022-10-18_jmp_sanitation_raw_data.rds    | live        | yes | duplicate of the 2022-10-19 rds (byte-identical)                                                                                                               |
+| jmp2021 | raw        | 2022-10-19 | data/derived_data/2022-10-19_jmp_sanitation_raw_data.csv    | live        | yes | jmp2021 raw baseline                                                                                                                                           |
+| jmp2021 | raw        | 2022-10-19 | data/derived_data/2022-10-19_jmp_sanitation_raw_data.rds    | live        | yes | alias of the 2022-10-19 csv (same data, rds format)                                                                                                            |
+| jmp2023 | raw        |  | data/raw_data/snapshots/jmp2023/country_files               | wayback     | no  | input: raw country files not recovered (0/20 of the first 20 countries archived 20230706-20250601; a partial snapshot would corrupt added/removed counts)      |
+| jmp2025 | raw        | 2026-08-20 | data/derived_data/2026-08-20_jmp_sanitation_raw_data.csv    | live        | yes | tidied by 05_tidy_raw_data.R from data/raw_data/snapshots/jmp2025/country_files                                                                                |
+| jmp2025 | raw        | 2026-08-20 | data/raw_data/snapshots/jmp2025/country_files               | live        | yes | input: 232 country files, 0 failed; tidy with 05_tidy_raw_data.R                                                                                               |
 
-Not yet available: jmp2017 (indicators), jmp2023 (indicators), jmp2023 (raw). Recovery of historic releases is tracked in issue #2, the fresh jmp2025 download in issue #4, and the snapshot registry in issue #1.
+Not yet available: jmp2017 (indicators), jmp2023 (raw). Recovery of historic releases is tracked in issue #2, the fresh jmp2025 download in issue #4, and the snapshot registry in issue #1.
 
 ## Raw survey data (sanitation)
 

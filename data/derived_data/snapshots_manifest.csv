@@ -1,7 +1,9 @@
 release_id,snapshot_date,pipeline,file,source,notes
+jmp2017,,indicators,data/raw_data/snapshots/jmp2017/WLD.xlsx,wayback,input: not recovered; no Wayback captures of the world file URL between 20170712 and 20190617
 jmp2019,2020-09-03,indicators,data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz,git-history,tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2019/WLD.xlsx
 jmp2021,2022-10-19,indicators,data/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz,live,jmp2021 indicators baseline; dated gzip copy of the file at commit 782603b
 jmp2021,2022-10-19,indicators,data/derived_data/jmp-washdata-indicators.csv,live,"alias: undated latest, overwritten by each release"
+jmp2023,2024-05-20,indicators,data/raw_data/snapshots/jmp2023/WLD.xlsx,wayback,"input: world file from Wayback capture 20240520144514 of http://washdata.org/data/country/WLD/download, max estimate year 2022; tidy with 04_tidy_indicators.R"
 jmp2025,2026-08-20,indicators,data/raw_data/snapshots/jmp2025/WLD.xlsx,live,"input: world file, max estimate year 2024; tidy with 04_tidy_indicators.R"
 jmp2019,2020-09-03,raw,data/derived_data/2020-09-03_jmp_sanitation_raw_data.rds,live,superseded by the 2020-09-30 pull
 jmp2019,2020-09-30,raw,data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds,live,"jmp2019-era raw baseline, as served 2020-09"
@@ -9,5 +11,6 @@ jmp2021,2022-10-18,raw,data/derived_data/2022-10-18_jmp_sanitation_raw_data.csv,
 jmp2021,2022-10-18,raw,data/derived_data/2022-10-18_jmp_sanitation_raw_data.rds,live,duplicate of the 2022-10-19 rds (byte-identical)
 jmp2021,2022-10-19,raw,data/derived_data/2022-10-19_jmp_sanitation_raw_data.csv,live,jmp2021 raw baseline
 jmp2021,2022-10-19,raw,data/derived_data/2022-10-19_jmp_sanitation_raw_data.rds,live,"alias of the 2022-10-19 csv (same data, rds format)"
+jmp2023,,raw,data/raw_data/snapshots/jmp2023/country_files,wayback,input: raw country files not recovered (0/20 of the first 20 countries archived 20230706-20250601; a partial snapshot would corrupt added/removed counts)
 jmp2025,2026-08-20,raw,data/derived_data/2026-08-20_jmp_sanitation_raw_data.csv,live,tidied by 05_tidy_raw_data.R from data/raw_data/snapshots/jmp2025/country_files
 jmp2025,2026-08-20,raw,data/raw_data/snapshots/jmp2025/country_files,live,"input: 232 country files, 0 failed; tidy with 05_tidy_raw_data.R"
