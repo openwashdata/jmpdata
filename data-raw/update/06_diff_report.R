@@ -1,7 +1,7 @@
 # header ------------------------------------------------------------------
 
 # Diff report: per-collection-year data point counts between JMP releases
-# Issue: https://github.com/openwashdata/jmpinput/issues/5
+# Issue: https://github.com/openwashdata/jmpdata/issues/5
 # Runs entirely on committed snapshots; no network access is needed.
 # Usage: Rscript data-raw/update/06_diff_report.R
 
@@ -262,7 +262,7 @@ lines <- c(
     paste0(
         "Generated on ", Sys.Date(),
         " by `data-raw/update/06_diff_report.R` ",
-        "([issue #5](https://github.com/openwashdata/jmpinput/issues/5)). ",
+        "([issue #5](https://github.com/openwashdata/jmpdata/issues/5)). ",
         "All numbers come from committed snapshots; no network access is used. ",
         "The CSV files next to this report are the machine-readable source of ",
         "truth; this file is the human summary."

@@ -1,9 +1,11 @@
 # Changelog
 
-## jmpinput 0.1.0
+## jmpdata 0.1.0
 
-First release of jmpinput as an openwashdata R data package, converted
-from the former scripts-and-outputs repository.
+First release of jmpdata as an openwashdata R data package, converted
+from the former scripts-and-outputs repository jmpinput and renamed,
+since the package now covers both the input data and the modelled
+estimates.
 
 - `jmpraw`: survey-level input data on sanitation underlying the
   WHO/UNICEF JMP estimates (26,926 data points, JMP 2025 release, pulled

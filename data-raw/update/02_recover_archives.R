@@ -1,7 +1,7 @@
 # header ------------------------------------------------------------------
 
 # Recover historic JMP releases from the Wayback Machine.
-# Issue: https://github.com/openwashdata/jmpinput/issues/2
+# Issue: https://github.com/openwashdata/jmpdata/issues/2
 #
 # washdata.org only serves the latest release, so the jmp2017 baseline and
 # the jmp2023 update are recovered from web.archive.org captures. The

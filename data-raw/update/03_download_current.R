@@ -3,7 +3,7 @@
 # Download the current JMP release from washdata.org: the world file and
 # all ~230 country files, into gitignored data-raw/raw_data/snapshots/<id>/.
 # Replaces the download logic embedded in the legacy gather scripts.
-# Issue: https://github.com/openwashdata/jmpinput/issues/4
+# Issue: https://github.com/openwashdata/jmpdata/issues/4
 #
 # Must run on a local machine; the remote sandbox cannot reach
 # washdata.org. Resumable: files that already downloaded completely are

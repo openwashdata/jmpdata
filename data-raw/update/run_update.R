@@ -2,7 +2,7 @@
 
 # One-command orchestrator for the JMP data update: runs the pipeline
 # steps 01 to 06 in order, driven by the parameters below.
-# Issue: https://github.com/openwashdata/jmpinput/issues/6
+# Issue: https://github.com/openwashdata/jmpdata/issues/6
 # See data-raw/UPDATING.md for the step-by-step version and prerequisites.
 #
 # Usage: edit the parameters, then

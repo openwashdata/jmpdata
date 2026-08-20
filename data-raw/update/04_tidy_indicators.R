@@ -3,7 +3,7 @@
 # Tidy the modelled indicator estimates from a JMP world file (WLD.xlsx).
 # Parameterized port of data-raw/gather/gather_jmp_data.R; the legacy script stays
 # untouched as the historical record.
-# Issue: https://github.com/openwashdata/jmpinput/issues/3
+# Issue: https://github.com/openwashdata/jmpdata/issues/3
 #
 # Usage:
 #   JMP_RELEASE_ID=jmp2025 Rscript data-raw/update/04_tidy_indicators.R

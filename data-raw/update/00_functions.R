@@ -1,7 +1,7 @@
 # header ------------------------------------------------------------------
 
 # Shared functions for the JMP data update pipeline (data-raw/update/)
-# Issue: https://github.com/openwashdata/jmpinput/issues/5
+# Issue: https://github.com/openwashdata/jmpdata/issues/5
 # The legacy data-raw/gather/ scripts stay untouched as the historical record;
 # new work lives in data-raw/update/.
 

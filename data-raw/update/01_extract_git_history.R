@@ -1,7 +1,7 @@
 # header ------------------------------------------------------------------
 
 # Snapshot registry and historic baselines from this repo's git history.
-# Issue: https://github.com/openwashdata/jmpinput/issues/1
+# Issue: https://github.com/openwashdata/jmpdata/issues/1
 #
 # Runs offline (no network) and is idempotent: every step checks whether
 # its output already exists. It

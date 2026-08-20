@@ -4,7 +4,7 @@
 # Parameterized port of data-raw/gather/gather_raw_data.R; the legacy script stays
 # untouched as the historical record. This script does NOT download
 # anything; downloads are issue #4's job.
-# Issue: https://github.com/openwashdata/jmpinput/issues/3
+# Issue: https://github.com/openwashdata/jmpdata/issues/3
 #
 # Usage:
 #   JMP_RELEASE_ID=jmp2025 Rscript data-raw/update/05_tidy_raw_data.R

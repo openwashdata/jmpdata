@@ -1,5 +1,5 @@
 
-url: https://github.com/openwashdata/jmpinput
+url: https://github.com/openwashdata/jmpdata
 template:
   bootstrap: 5
   includes:
@@ -10,7 +10,7 @@ home:
   links:
     - icon: github
       text: GitHub repository
-      href: https://github.com/openwashdata/jmpinput
+      href: https://github.com/openwashdata/jmpdata
   sidebar:
     structure: [links, citation, authors, dev, custom]
     components:

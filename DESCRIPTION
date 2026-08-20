@@ -1,4 +1,4 @@
-Package: jmpinput
+Package: jmpdata
 Title: Input Data and Indicator Estimates from the WHO/UNICEF Joint
     Monitoring Programme
 Version: 0.1.0
@@ -23,5 +23,5 @@ LazyData: true
 Language: en-GB
 Config/Needs/website: rmarkdown, tidyverse, tmap, sf, countrycode
 Date: 2026-08-20
-URL: https://github.com/openwashdata/jmpinput
-BugReports: https://github.com/openwashdata/jmpinput/issues
+URL: https://github.com/openwashdata/jmpdata
+BugReports: https://github.com/openwashdata/jmpdata/issues

@@ -1,6 +1,6 @@
 # JMP snapshot diff report
 
-Generated on 2026-08-20 by `data-raw/update/06_diff_report.R` ([issue #5](https://github.com/openwashdata/jmpinput/issues/5)). All numbers come from committed snapshots; no network access is used. The CSV files next to this report are the machine-readable source of truth; this file is the human summary.
+Generated on 2026-08-20 by `data-raw/update/06_diff_report.R` ([issue #5](https://github.com/openwashdata/jmpdata/issues/5)). All numbers come from committed snapshots; no network access is used. The CSV files next to this report are the machine-readable source of truth; this file is the human summary.
 
 ## Snapshot inventory
 

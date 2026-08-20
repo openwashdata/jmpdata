@@ -1,4 +1,4 @@
-^jmpinput\.Rproj$
+^jmpdata\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
 ^LICENSE\.md$
@@ -12,6 +12,6 @@
 ^vignettes/articles$
 ^CONTRIBUTING\.md$
 ^code_of_conduct\.md$
-^jmpinput\.Rcheck$
-^jmpinput.*\.tar\.gz$
-^jmpinput.*\.tgz$
+^jmpdata\.Rcheck$
+^jmpdata.*\.tar\.gz$
+^jmpdata.*\.tgz$

@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# jmpinput
+# jmpdata
 
 <!-- badges: start -->
 
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of jmpinput is to make the data behind the WHO/UNICEF Joint
+The goal of jmpdata is to make the data behind the WHO/UNICEF Joint
 Monitoring Programme for Water Supply, Sanitation and Hygiene (JMP)
 available as tidy, documented R datasets. The package contains two
 data resources from the JMP 2025 release, both prepared by the update
@@ -47,12 +47,12 @@ pipeline documented in `data-raw/UPDATING.md`:
 
 ## Installation
 
-You can install the development version of jmpinput from
+You can install the development version of jmpdata from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("openwashdata/jmpinput")
+devtools::install_github("openwashdata/jmpdata")
 ```
 
 ```{r}
@@ -80,7 +80,7 @@ open `.csv.gz` files directly).
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
-extdata_path <- "https://github.com/openwashdata/jmpinput/raw/main/inst/extdata/"
+extdata_path <- "https://github.com/openwashdata/jmpdata/raw/main/inst/extdata/"
 
 tibble::tribble(
   ~dataset, ~CSV, ~XLSX,
@@ -103,7 +103,7 @@ Water Supply, Sanitation and Hygiene (JMP), packaged from the JMP 2025
 release (pulled 2026-08-20).
 
 ```{r}
-library(jmpinput)
+library(jmpdata)
 ```
 
 ### jmpraw
@@ -163,7 +163,7 @@ How many survey-level sanitation data points does each JMP release
 hold for Uganda, by source type?
 
 ```{r}
-library(jmpinput)
+library(jmpdata)
 library(dplyr)
 
 jmpraw |>
@@ -187,12 +187,12 @@ jmpindicators |>
 ## License
 
 Data are available as
-[CC-BY](https://github.com/openwashdata/jmpinput/blob/main/LICENSE.md).
+[CC-BY](https://github.com/openwashdata/jmpdata/blob/main/LICENSE.md).
 
 ## Citation
 
 Please cite this package using:
 
 ```{r}
-citation("jmpinput")
+citation("jmpdata")
 ```

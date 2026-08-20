@@ -1,6 +1,6 @@
-# jmpinput
+# jmpdata
 
-The goal of jmpinput is to make the data behind the WHO/UNICEF Joint
+The goal of jmpdata is to make the data behind the WHO/UNICEF Joint
 Monitoring Programme for Water Supply, Sanitation and Hygiene (JMP)
 available as tidy, documented R datasets. The package contains two data
 resources from the JMP 2025 release, both prepared by the update
@@ -16,13 +16,13 @@ pipeline documented in `data-raw/UPDATING.md`:
 
 ## Installation
 
-You can install the development version of jmpinput from
+You can install the development version of jmpdata from
 [GitHub](https://github.com/) with:
 
 ``` r
 
 # install.packages("devtools")
-devtools::install_github("openwashdata/jmpinput")
+devtools::install_github("openwashdata/jmpdata")
 ```
 
 ``` r
@@ -52,8 +52,8 @@ and most spreadsheet tools open `.csv.gz` files directly).
 
 | dataset | CSV | XLSX |
 |:---|:---|:---|
-| jmpraw | [Download CSV](https://github.com/openwashdata/jmpinput/raw/main/inst/extdata/jmpraw.csv) | [Download XLSX](https://github.com/openwashdata/jmpinput/raw/main/inst/extdata/jmpraw.xlsx) |
-| jmpindicators | [Download CSV (gzip)](https://github.com/openwashdata/jmpinput/raw/main/inst/extdata/jmpindicators.csv.gz) |  |
+| jmpraw | [Download CSV](https://github.com/openwashdata/jmpdata/raw/main/inst/extdata/jmpraw.csv) | [Download XLSX](https://github.com/openwashdata/jmpdata/raw/main/inst/extdata/jmpraw.xlsx) |
+| jmpindicators | [Download CSV (gzip)](https://github.com/openwashdata/jmpdata/raw/main/inst/extdata/jmpindicators.csv.gz) |  |
 
 ## Data
 
@@ -64,7 +64,7 @@ Sanitation and Hygiene (JMP), packaged from the JMP 2025 release (pulled
 
 ``` r
 
-library(jmpinput)
+library(jmpdata)
 ```
 
 ### jmpraw
@@ -147,7 +147,7 @@ for Uganda, by source type?
 
 ``` r
 
-library(jmpinput)
+library(jmpdata)
 library(dplyr)
 
 jmpraw |>
@@ -186,7 +186,7 @@ jmpindicators |>
 ## License
 
 Data are available as
-[CC-BY](https://github.com/openwashdata/jmpinput/blob/main/LICENSE.md).
+[CC-BY](https://github.com/openwashdata/jmpdata/blob/main/LICENSE.md).
 
 ## Citation
 
@@ -194,21 +194,21 @@ Please cite this package using:
 
 ``` r
 
-citation("jmpinput")
-#> To cite package 'jmpinput' in publications use:
+citation("jmpdata")
+#> To cite package 'jmpdata' in publications use:
 #> 
-#>   Schöbitz L (2026). "jmpinput: Input Data and Indicator Estimates from
+#>   Schöbitz L (2026). "jmpdata: Input Data and Indicator Estimates from
 #>   the WHO/UNICEF Joint Monitoring Programme."
-#>   <https://github.com/openwashdata/jmpinput>.
+#>   <https://github.com/openwashdata/jmpdata>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Misc{schobitz:2026,
-#>     title = {jmpinput: Input Data and Indicator Estimates from the WHO/UNICEF Joint Monitoring Programme},
+#>     title = {jmpdata: Input Data and Indicator Estimates from the WHO/UNICEF Joint Monitoring Programme},
 #>     author = {Lars Schöbitz},
 #>     year = {2026},
-#>     url = {https://github.com/openwashdata/jmpinput},
+#>     url = {https://github.com/openwashdata/jmpdata},
 #>     abstract = {Contains two data resources from the WHO/UNICEF Joint Monitoring Programme (JMP) for Water Supply, Sanitation and Hygiene. `jmpraw` holds the survey-level input data on sanitation that underlies the JMP estimates, collected from the country files published on <https://washdata.org>. `jmpindicators` holds the modelled JMP indicator estimates for water, sanitation and hygiene from the JMP world file. Both datasets are packaged from the JMP 2025 release.},
-#>     version = {0.0.0.9000},
+#>     version = {0.1.0},
 #>   }
 ```

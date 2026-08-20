@@ -1,5 +1,5 @@
 # Description ------------------------------------------------------------------
-# Packaging step for the jmpinput data package: turns the latest dated
+# Packaging step for the jmpdata data package: turns the latest dated
 # outputs of the update pipeline (data-raw/update/run_update.R, see
 # data-raw/UPDATING.md) into the package datasets and human-readable
 # exports. Re-run after a pipeline update; latest() picks the newest

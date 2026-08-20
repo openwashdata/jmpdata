@@ -4,10 +4,10 @@
 # ------------------------------------------------
  
 cff-version: 1.2.0
-message: 'To cite package "jmpinput" in publications use:'
+message: 'To cite package "jmpdata" in publications use:'
 type: software
 license: CC-BY-4.0
-title: 'jmpinput: Input Data and Indicator Estimates from the WHO/UNICEF Joint Monitoring
+title: 'jmpdata: Input Data and Indicator Estimates from the WHO/UNICEF Joint Monitoring
   Programme'
 version: 0.1.0
 abstract: Contains two data resources from the WHO/UNICEF Joint Monitoring Programme
@@ -21,8 +21,8 @@ authors:
   given-names: Lars
   email: lschoebitz@ethz.ch
   orcid: https://orcid.org/0000-0003-2196-5015
-repository-code: https://github.com/openwashdata/jmpinput
-url: https://github.com/openwashdata/jmpinput
+repository-code: https://github.com/openwashdata/jmpdata
+url: https://github.com/openwashdata/jmpdata
 date-released: '2026-08-20'
 contact:
 - family-names: Schöbitz
