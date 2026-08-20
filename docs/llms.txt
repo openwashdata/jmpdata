@@ -223,3 +223,9 @@ citation("jmpinput")
 - [`jmpraw`](https://github.com/openwashdata/jmpinput/reference/jmpraw.md)
   : jmpraw: Survey-Level Sanitation Input Data from the WHO/UNICEF JMP
 
+# Articles
+
+### All vignettes
+
+- [JMP raw data
+  visualisations](https://github.com/openwashdata/jmpinput/articles/jmp_raw_data_vis.md):
