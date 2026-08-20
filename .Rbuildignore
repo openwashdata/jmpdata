@@ -1,3 +1,8 @@
 ^data-raw$
 ^LICENSE\.md$
 ^data/metadata$
+^README\.Rmd$
+^vignettes/articles$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

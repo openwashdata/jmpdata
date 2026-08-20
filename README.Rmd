@@ -1,0 +1,198 @@
+---
+output: github_document
+always_allow_html: true
+editor_options:
+  markdown:
+    wrap: 72
+  chunk_output_type: console
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  message = FALSE,
+  warning = FALSE,
+  fig.retina = 2,
+  fig.align = 'center'
+)
+```
+
+# jmpinput
+
+<!-- badges: start -->
+
+[![License: CC BY
+4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+
+<!-- badges: end -->
+
+The goal of jmpinput is to make the data behind the WHO/UNICEF Joint
+Monitoring Programme for Water Supply, Sanitation and Hygiene (JMP)
+available as tidy, documented R datasets. The package contains two
+data resources from the JMP 2025 release, both prepared by the update
+pipeline documented in `data-raw/UPDATING.md`:
+
+- `jmpraw`: the survey-level input data on sanitation that underlies
+  the JMP estimates, extracted from the country files published on
+  [washdata.org](https://washdata.org).
+- `jmpindicators`: the modelled JMP indicator estimates for drinking
+  water, sanitation and hygiene from the JMP world file, with variable
+  codes normalized to the legacy JMP vocabulary so snapshots stay
+  comparable across releases.
+
+## Installation
+
+You can install the development version of jmpinput from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("openwashdata/jmpinput")
+```
+
+```{r}
+## Run the following code in console if you don't have the packages
+## install.packages(c("dplyr", "knitr", "readr", "stringr", "gt", "kableExtra"))
+library(dplyr)
+library(knitr)
+library(readr)
+library(stringr)
+library(gt)
+library(kableExtra)
+```
+
+Alternatively, you can download the individual datasets from the table
+below. `jmpraw` is available as CSV and XLSX; `jmpindicators` is
+available as a gzip-compressed CSV only, because the uncompressed file
+is about 38 MB (R's `readr::read_csv()` and most spreadsheet tools
+open `.csv.gz` files directly).
+
+1.  Click a download link. A window opens that displays the file in
+    your browser, or downloads it directly.
+2.  If the file is displayed, right-click anywhere inside the window
+    and select "Save Page As...".
+3.  Save the file in a folder of your choice.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+extdata_path <- "https://github.com/openwashdata/jmpinput/raw/main/inst/extdata/"
+
+tibble::tribble(
+  ~dataset, ~CSV, ~XLSX,
+  "jmpraw",
+  paste0("[Download CSV](", extdata_path, "jmpraw.csv)"),
+  paste0("[Download XLSX](", extdata_path, "jmpraw.xlsx)"),
+  "jmpindicators",
+  paste0("[Download CSV (gzip)](", extdata_path, "jmpindicators.csv.gz)"),
+  ""
+) |>
+  knitr::kable()
+
+```
+
+## Data
+
+The package provides access to the input data and the modelled
+indicator estimates of the WHO/UNICEF Joint Monitoring Programme for
+Water Supply, Sanitation and Hygiene (JMP), packaged from the JMP 2025
+release (pulled 2026-08-20).
+
+```{r}
+library(jmpinput)
+```
+
+### jmpraw
+
+The dataset `jmpraw` contains the survey, census and administrative
+data points on sanitation that underlie the JMP estimates, one row per
+country, source, collection year and sanitation variable. It has
+`r nrow(jmpraw)` observations and `r ncol(jmpraw)` variables.
+
+```{r}
+jmpraw |>
+  head(3) |>
+  gt::gt() |>
+  gt::as_raw_html()
+```
+
+For an overview of the variable names, see the following table.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+readr::read_csv("data-raw/dictionary.csv") |>
+  dplyr::filter(file_name == "jmpraw.rda") |>
+  dplyr::select(variable_name:description) |>
+  knitr::kable() |>
+  kableExtra::kable_styling("striped") |>
+  kableExtra::scroll_box(height = "200px")
+```
+
+### jmpindicators
+
+The dataset `jmpindicators` contains the modelled JMP indicator
+estimates for drinking water, sanitation and hygiene, one row per
+country, estimate year, residence level and indicator. It has
+`r nrow(jmpindicators)` observations and `r ncol(jmpindicators)`
+variables.
+
+```{r}
+jmpindicators |>
+  head(3) |>
+  gt::gt() |>
+  gt::as_raw_html()
+```
+
+For an overview of the variable names, see the following table.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+readr::read_csv("data-raw/dictionary.csv") |>
+  dplyr::filter(file_name == "jmpindicators.rda") |>
+  dplyr::select(variable_name:description) |>
+  knitr::kable() |>
+  kableExtra::kable_styling("striped") |>
+  kableExtra::scroll_box(height = "200px")
+```
+
+## Example
+
+How many survey-level sanitation data points does each JMP release
+hold for Uganda, by source type?
+
+```{r}
+library(jmpinput)
+library(dplyr)
+
+jmpraw |>
+  filter(iso3 == "UGA") |>
+  count(type, sort = TRUE)
+```
+
+Safely managed sanitation in Uganda over time, from the modelled
+estimates:
+
+```{r}
+jmpindicators |>
+  filter(iso3 == "UGA",
+         indicator == "Safely managed",
+         service == "sanitation",
+         residence == "national",
+         year %in% c(2000, 2010, 2020, 2024)) |>
+  select(year, percent)
+```
+
+## License
+
+Data are available as
+[CC-BY](https://github.com/openwashdata/jmpinput/blob/main/LICENSE.md).
+
+## Citation
+
+Please cite this package using:
+
+```{r}
+citation("jmpinput")
+```

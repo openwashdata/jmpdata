@@ -1,0 +1,25 @@
+# washr
+
+Repo for R scripts to download and clean open sanitation data
+
+## License
+
+See the [LICENSE](https://github.com/openwashdata/jmpinput/LICENSE.md)
+file for license rights and limitations (MIT).
+
+## Contributing
+
+See the
+[CONTRIBUTING](https://github.com/openwashdata/jmpinput/CONTRIBUTING.md)
+file for how to contribute.
+
+# Package index
+
+## All functions
+
+- [`jmpindicators`](https://github.com/openwashdata/jmpinput/reference/jmpindicators.md)
+  : jmpindicators: Modelled WASH Indicator Estimates from the WHO/UNICEF
+  JMP
+- [`jmpraw`](https://github.com/openwashdata/jmpinput/reference/jmpraw.md)
+  : jmpraw: Survey-Level Sanitation Input Data from the WHO/UNICEF JMP
+
