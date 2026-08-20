@@ -23,17 +23,18 @@ indicator_key <- c("iso3", "year", "residence", "var_short", "indicator_type")
 
 # snapshot manifest -------------------------------------------------------
 
-## Issue #1 will deliver data/derived_data/snapshots_manifest.csv; until then
-## this built-in registry lists every SDG-era release with the path where its
-## snapshot lives, or is expected to land once #1, #2 and #4 are done.
+## The registry data/derived_data/snapshots_manifest.csv (issue #1; seeded
+## by 01_extract_git_history.R, appended to by the tidy scripts) is the
+## source of truth. The built-in rows below fill in releases the manifest
+## does not know yet, so unavailable releases stay visible in the
+## inventory. One row per file; rows whose notes start with "duplicate",
+## "alias", "superseded" or "input" (downloaded raw xlsx, not yet tidied)
+## are listed in the inventory but excluded from diff chains.
 
 manifest_path <- here::here("data/derived_data/snapshots_manifest.csv")
 
-if (file.exists(manifest_path)) {
-    manifest <- read_csv(manifest_path, show_col_types = FALSE)
-} else {
-    manifest <- tribble(
-        ~release, ~pipeline, ~pull_date, ~path,
+builtin_manifest <- tribble(
+        ~release_id, ~pipeline, ~snapshot_date, ~file,
         "jmp2019", "raw", "2020-09-30",
         "data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds",
         "jmp2021", "raw", "2022-10-19",
@@ -45,32 +46,54 @@ if (file.exists(manifest_path)) {
         "jmp2017", "indicators", NA,
         "data/derived_data/jmp2017_jmp_washdata_indicators.csv",
         "jmp2019", "indicators", NA,
-        "data/derived_data/jmp2019_jmp_washdata_indicators.csv",
+        "data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz",
         "jmp2021", "indicators", "2022-10-19",
         "data/derived_data/jmp-washdata-indicators.csv",
         "jmp2023", "indicators", NA,
         "data/derived_data/jmp2023_jmp_washdata_indicators.csv",
         "jmp2025", "indicators", NA,
         "data/derived_data/jmp2025_jmp_washdata_indicators.csv"
-    )
+    ) |>
+    mutate(source = NA_character_, notes = NA_character_)
+
+file_manifest <- if (file.exists(manifest_path)) {
+    read_csv(manifest_path, show_col_types = FALSE, col_types = "cccccc")
+} else {
+    NULL
 }
 
-manifest <- manifest |>
+## built-in placeholder rows only fill in release/pipeline combinations
+## the manifest does not cover at all
+
+builtin_keep <- if (is.null(file_manifest)) {
+    builtin_manifest
+} else {
+    anti_join(builtin_manifest, file_manifest,
+              by = c("release_id", "pipeline"))
+}
+
+manifest <- bind_rows(file_manifest, builtin_keep) |>
+    distinct(file, .keep_all = TRUE) |>
     mutate(
-        available = file.exists(here::here(path)),
-        release = factor(release, levels = release_order)
+        available = file.exists(here::here(file)),
+        excluded = !is.na(notes) &
+            str_detect(notes, "^(duplicate|alias|superseded|input)"),
+        release_id = factor(release_id, levels = release_order)
     ) |>
-    arrange(pipeline, release)
+    arrange(pipeline, release_id, snapshot_date)
 
 # diff runners ------------------------------------------------------------
 
-## Pair up the available snapshots of one pipeline in release order.
+## Pair up the available snapshots of one pipeline in release order, one
+## snapshot per release (manifest rows outrank built-in rows, duplicates
+## and aliases are already excluded).
 
 consecutive_pairs <- function(manifest, which_pipeline) {
 
     snapshots <- manifest |>
-        filter(pipeline == which_pipeline, available) |>
-        arrange(release)
+        filter(pipeline == which_pipeline, available, !excluded) |>
+        distinct(release_id, .keep_all = TRUE) |>
+        arrange(release_id)
 
     if (nrow(snapshots) < 2) {
         return(list())
@@ -83,15 +106,15 @@ consecutive_pairs <- function(manifest, which_pipeline) {
 
 run_raw_pair <- function(pair) {
 
-    label <- paste0(pair$old$release, "_vs_", pair$new$release)
+    label <- paste0(pair$old$release_id, "_vs_", pair$new$release_id)
     message("Raw diff: ", label)
 
     diff <- diff_snapshots(
-        old = read_raw_snapshot(here::here(pair$old$path)),
-        new = read_raw_snapshot(here::here(pair$new$path)),
+        old = read_raw_snapshot(here::here(pair$old$file)),
+        new = read_raw_snapshot(here::here(pair$new$file)),
         key_cols = raw_key,
         value_col = "value",
-        labels = paste0(c(pair$old$release, pair$new$release), "_raw"),
+        labels = paste0(c(pair$old$release_id, pair$new$release_id), "_raw"),
         duplicates_dir = report_dir
     )
 
@@ -110,15 +133,15 @@ run_raw_pair <- function(pair) {
 
 run_indicator_pair <- function(pair) {
 
-    label <- paste0(pair$old$release, "_vs_", pair$new$release)
+    label <- paste0(pair$old$release_id, "_vs_", pair$new$release_id)
     message("Indicator diff: ", label)
 
     diff <- diff_snapshots(
-        old = read_indicator_snapshot(here::here(pair$old$path)),
-        new = read_indicator_snapshot(here::here(pair$new$path)),
+        old = read_indicator_snapshot(here::here(pair$old$file)),
+        new = read_indicator_snapshot(here::here(pair$new$file)),
         key_cols = indicator_key,
         value_col = "percent",
-        labels = paste0(c(pair$old$release, pair$new$release), "_indicators"),
+        labels = paste0(c(pair$old$release_id, pair$new$release_id), "_indicators"),
         duplicates_dir = report_dir
     )
 
@@ -151,11 +174,11 @@ headline_lines <- function(result, key_cols) {
 
     c(
         paste0(
-            "Old snapshot: ", result$pair$old$release,
-            " (pulled ", result$pair$old$pull_date, ", ",
+            "Old snapshot: ", result$pair$old$release_id,
+            " (pulled ", result$pair$old$snapshot_date, ", ",
             format(old_rows, big.mark = ","), " data points). ",
-            "New snapshot: ", result$pair$new$release,
-            " (pulled ", result$pair$new$pull_date, ", ",
+            "New snapshot: ", result$pair$new$release_id,
+            " (pulled ", result$pair$new$snapshot_date, ", ",
             format(new_rows, big.mark = ","), " data points)."
         ),
         "",
@@ -211,8 +234,9 @@ indicator_section <- function(result) {
 no_pair_lines <- function(which_pipeline) {
 
     available <- manifest |>
-        filter(pipeline == which_pipeline, available) |>
-        pull(release)
+        filter(pipeline == which_pipeline, available, !excluded) |>
+        distinct(release_id) |>
+        pull(release_id)
 
     paste0(
         "Fewer than two ", which_pipeline,
@@ -225,9 +249,12 @@ no_pair_lines <- function(which_pipeline) {
 
 inventory <- manifest |>
     mutate(available = ifelse(available, "yes", "no")) |>
-    select(release, pipeline, pull_date, path, available)
+    select(release_id, pipeline, snapshot_date, file, source,
+           available, notes)
 
-unavailable <- manifest |> filter(!available)
+unavailable <- manifest |>
+    filter(!available) |>
+    distinct(release_id, pipeline)
 
 lines <- c(
     "# JMP snapshot diff report",
@@ -252,7 +279,7 @@ if (nrow(unavailable) > 0) {
         lines,
         paste0(
             "Not yet available: ",
-            paste0(unavailable$release, " (", unavailable$pipeline, ")",
+            paste0(unavailable$release_id, " (", unavailable$pipeline, ")",
                    collapse = ", "),
             ". Recovery of historic releases is tracked in issue #2, the fresh ",
             "jmp2025 download in issue #4, and the snapshot registry in issue #1."
@@ -293,14 +320,17 @@ lines <- c(
         "release add\"."
     ),
     paste0(
-        "- Source labels are normalized before diffing: the 2020-09-30 pull ",
+        "- Raw snapshots are normalized before diffing: the 2020-09-30 pull ",
         "suffixes sources with a two-digit publication year (\"CEN00\") which ",
-        "later pulls drop (\"CEN\"), so trailing digits are stripped, and the ",
-        "type \"Survey with microdata\" (introduced after the 2020 pull) is ",
-        "collapsed into \"Survey\". Without this normalization not a single ",
-        "identity key matches across the two committed releases. Source ",
-        "renames that go beyond the suffix still appear as a paired `added` ",
-        "and `removed` row."
+        "later pulls drop (\"CEN\"), so trailing digits are stripped; type ",
+        "labels are mapped to English base categories (the 2022 pull split ",
+        "\"Survey with microdata\" out of \"Survey\", the 2025 release ",
+        "localizes types into the country language); and the 2025 variable ",
+        "renames are mapped back to the legacy vocabulary (suffix _t to _n, ",
+        "s_ns_* to s_od_*, verified value-identical on matched keys). ",
+        "Without this normalization not a single identity key matches ",
+        "across releases. Renames that go beyond these rules still appear ",
+        "as a paired `added` and `removed` row."
     ),
     paste0(
         "- Where two source editions collapse onto one normalized key with ",

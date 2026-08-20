@@ -1,0 +1,136 @@
+var_long,var_short
+Source,source
+Type,type
+Year,year
+Improved,w_imp_t
+Piped,w_pip_t
+Surface water,w_ns_t
+No more than 30 mins,w_30min_t
+Accessible on premises,w_premises_t
+Available when needed,w_available_t
+Free from contamination,w_quality_t
+Improved,w_imp_u
+Piped,w_pip_u
+Surface water,w_ns_u
+No more than 30 mins,w_30min_u
+Accessible on premises,w_premises_u
+Available when needed,w_available_u
+Free from contamination,w_quality_u
+Improved,w_imp_r
+Piped,w_pip_r
+Surface water,w_ns_r
+No more than 30 mins,w_30min_r
+Accessible on premises,w_premises_r
+Available when needed,w_available_r
+Free from contamination,w_quality_r
+Improved,s_imp_t
+Sewer connection,s_sew_t
+Septic tanks,s_sep_t
+Latrines and other,s_lat_t
+Open defecation,s_ns_t
+Wastewater enters network,s_sew_net_t
+Wastewater reaches treatment plant,s_sew_rtp_t
+Septic: contained,s_sep_con_t
+Septic: not emptied,s_sep_nemp_t
+Septic: emptied and buried onsite,s_sep_ebo_t
+Septic: emptied and discharged locally,s_sep_edl_t
+Septic: emptied and removed offsite,s_sep_ero_t
+Septic: delivered to treatment plant,s_sep_dtp_t
+Latrines: contained,s_lat_con_t
+Latrines: not emptied,s_lat_nemp_t
+Latrines: emptied and buried onsite,s_lat_ebo_t
+Latrines: emptied and discharged locally,s_lat_edl_t
+Latrines: emptied and removed offsite,s_lat_ero_t
+Latrines: delivered to treatment plant,s_lat_dtp_t
+Treated at wastewater treatment plant,s_treat_wtp_t
+Treated at faecal sludge treatment plant,s_treat_fstp_t
+Shared,s_shared_t
+Improved,s_imp_u
+Sewer connection,s_sew_u
+Septic tanks,s_sep_u
+Latrines and other,s_lat_u
+Open defecation,s_ns_u
+Wastewater enters network,s_sew_net_u
+Wastewater reaches treatment plant,s_sew_rtp_u
+Septic: contained,s_sep_con_u
+Septic: not emptied,s_sep_nemp_u
+Septic: emptied and buried onsite,s_sep_ebo_u
+Septic: emptied and discharged locally,s_sep_edl_u
+Septic: emptied and removed offsite,s_sep_ero_u
+Septic: delivered to treatment plant,s_sep_dtp_u
+Latrines: contained,s_lat_con_u
+Latrines: not emptied,s_lat_nemp_u
+Latrines: emptied and buried onsite,s_lat_ebo_u
+Latrines: emptied and discharged locally,s_lat_edl_u
+Latrines: emptied and removed offsite,s_lat_ero_u
+Latrines: delivered to treatment plant,s_lat_dtp_u
+Treated at wastewater treatment plant,s_treat_wtp_u
+Treated at faecal sludge treatment plant,s_treat_fstp_u
+Shared,s_shared_u
+Improved,s_imp_r
+Sewer connection,s_sew_r
+Septic tanks,s_sep_r
+Latrines and other,s_lat_r
+Open defecation,s_ns_r
+Wastewater enters network,s_sew_net_r
+Wastewater reaches treatment plant,s_sew_rtp_r
+Septic: contained,s_sep_con_r
+Septic: not emptied,s_sep_nemp_r
+Septic: emptied and buried onsite,s_sep_ebo_r
+Septic: emptied and discharged locally,s_sep_edl_r
+Septic: emptied and removed offsite,s_sep_ero_r
+Septic: delivered to treatment plant,s_sep_dtp_r
+Latrines: contained,s_lat_con_r
+Latrines: not emptied,s_lat_nemp_r
+Latrines: emptied and buried onsite,s_lat_ebo_r
+Latrines: emptied and discharged locally,s_lat_edl_r
+Latrines: emptied and removed offsite,s_lat_ero_r
+Latrines: delivered to treatment plant,s_lat_dtp_r
+Treated at wastewater treatment plant,s_treat_wtp_r
+Treated at faecal sludge treatment plant,s_treat_fstp_r
+Shared,s_shared_r
+Source,h_source
+Type,h_type
+Year,h_year
+Handwashing facility,h_fac_t
+Facilty with water and soap,h_ws_t
+Bathing facility,h_bfac_t
+Bathing facility on premises with water,h_bfacw_t
+Handwashing facility,h_fac_u
+Facilty with water and soap,h_ws_u
+Bathing facility,h_bfac_u
+Bathing facility on premises with water,h_bfacw_u
+Handwashing facility,h_fac_r
+Facilty with water and soap,h_ws_r
+Bathing facility,h_bfac_r
+Bathing facility on premises with water,h_bfacw_r
+NA,m_source
+NA,m_type
+NA,m_year
+Use of menstrual materials,m_mat_t
+Reusable materials,m_reuse_t
+Single-use materials,m_nreuse_t
+Enough menstrual materials,m_enoumat_t
+Private place to change,m_priv_t
+Awareness of menstruation before first menstrual period,m_aware_t
+Ability to reduce menstruation-related pain,m_pain_t
+Comfort seeking help from a health care provider,m_comfort_t
+"Participation in school, work, social activities during menstruation",m_part_t
+Use of menstrual materials,m_mat_u
+Reusable materials,m_reuse_u
+Single-use materials,m_nreuse_u
+Enough menstrual materials,m_enoumat_u
+Private place to change,m_priv_u
+Awareness of menstruation before first menstrual period,m_aware_u
+Ability to reduce menstruation-related pain,m_pain_u
+Comfort seeking help from a health care provider,m_comfort_u
+"Participation in school, work, social activities during menstruation",m_part_u
+Use of menstrual materials,m_mat_r
+Reusable materials,m_reuse_r
+Single-use materials,m_nreuse_r
+Enough menstrual materials,m_enoumat_r
+Private place to change,m_priv_r
+Awareness of menstruation before first menstrual period,m_aware_r
+Ability to reduce menstruation-related pain,m_pain_r
+Comfort seeking help from a health care provider,m_comfort_r
+"Participation in school, work, social activities during menstruation",m_part_r
