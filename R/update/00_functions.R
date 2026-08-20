@@ -99,7 +99,165 @@ summarise_diff_by <- function(diff, by) {
         arrange(across(all_of(by)))
 }
 
+# update pipeline parameters ----------------------------------------------
+
+## Shared parameter block for the tidy scripts (04, 05). Everything is set
+## via environment variables so the same scripts tidy any release:
+##
+##   JMP_RELEASE_ID   release being tidied (default "jmp2025")
+##   JMP_SNAPSHOT_DIR directory holding the downloaded files for the release
+##                    (default data/raw_data/snapshots/<release_id>)
+##   JMP_OUTPUT_DIR   where tidy outputs and the manifest go
+##                    (default data/derived_data)
+##   JMP_PULL_DATE    download date used to prefix output files
+##                    (default today; set to 2022-10-19 when re-tidying the
+##                    committed 2022 pull)
+
+jmp_update_params <- function() {
+
+    release_id <- Sys.getenv("JMP_RELEASE_ID", "jmp2025")
+
+    snapshot_dir <- Sys.getenv(
+        "JMP_SNAPSHOT_DIR",
+        file.path("data/raw_data/snapshots", release_id)
+    )
+    output_dir <- Sys.getenv("JMP_OUTPUT_DIR", "data/derived_data")
+
+    ## relative paths resolve against the repo root; absolute paths pass
+    ## through (here::here() would mangle them). output_dir_label keeps the
+    ## unresolved string for the manifest's path column, so repo-relative
+    ## outputs stay relative there.
+    resolve <- function(path) {
+        if (startsWith(path, "/")) path else here::here(path)
+    }
+
+    list(
+        release_id = release_id,
+        snapshot_dir = resolve(snapshot_dir),
+        output_dir = resolve(output_dir),
+        output_dir_label = output_dir,
+        pull_date = Sys.getenv("JMP_PULL_DATE", as.character(Sys.Date()))
+    )
+}
+
+# excel readers ------------------------------------------------------------
+
+## Read one sheet from a JMP Excel file by name, never by position: the
+## positional indices 3/5/7 of the legacy scripts would silently break if
+## JMP reorders sheets. The reader argument preserves the exact reader the
+## legacy pipeline used (openxlsx for the world file, readxl for country
+## files), because the two guess column types differently and the outputs
+## must stay comparable.
+
+read_jmp_sheet <- function(path, sheet_name,
+                           reader = c("openxlsx", "readxl"), ...) {
+
+    reader <- match.arg(reader)
+
+    sheets <- if (reader == "openxlsx") {
+        openxlsx::getSheetNames(path)
+    } else {
+        readxl::excel_sheets(path)
+    }
+
+    if (!sheet_name %in% sheets) {
+        stop("Sheet '", sheet_name, "' not found in ", basename(path),
+             ". Available sheets: ", paste(sheets, collapse = ", "),
+             call. = FALSE)
+    }
+
+    if (reader == "openxlsx") {
+        as_tibble(openxlsx::read.xlsx(path, sheet = sheet_name, ...))
+    } else {
+        readxl::read_excel(path, sheet = sheet_name, ...)
+    }
+}
+
+# variable lookup join -----------------------------------------------------
+
+## Left-join the hand-curated variable lookup, then warn about and record
+## any var_short the lookup does not know BEFORE dropping it. New JMP
+## releases are expected to introduce variables; the warning file is the
+## signal to hand-extend the lookup and re-run. This replaces the legacy
+## silent filter(!is.na(var_long)).
+
+join_jmp_vars <- function(data, lookup,
+                          output_dir = "data/derived_data",
+                          pull_date = as.character(Sys.Date())) {
+
+    joined <- data |>
+        left_join(lookup, by = "var_short")
+
+    unmatched <- joined |>
+        filter(is.na(var_long)) |>
+        distinct(var_short)
+
+    if (nrow(unmatched) > 0) {
+        unmatched_path <- file.path(
+            output_dir, paste0(pull_date, "_unmatched_variables.csv")
+        )
+        write_csv(unmatched, unmatched_path)
+        warning(nrow(unmatched), " var_short value(s) not in the variable ",
+                "lookup were dropped; written to ", unmatched_path,
+                ". Extend data/derived_data/jmp_wash_variables_complete.csv ",
+                "and re-run.", call. = FALSE)
+    }
+
+    joined |>
+        filter(!is.na(var_long))
+}
+
+# snapshot manifest --------------------------------------------------------
+
+## Record a tidied snapshot in the manifest that 06_diff_report.R consumes.
+## One row per release and pipeline; re-tidying a release replaces its row.
+
+append_manifest_row <- function(manifest_path, release, pipeline,
+                                pull_date, path) {
+
+    new_row <- tibble(
+        release = release,
+        pipeline = pipeline,
+        pull_date = as.character(pull_date),
+        path = path
+    )
+
+    manifest <- if (file.exists(manifest_path)) {
+        read_csv(manifest_path, show_col_types = FALSE,
+                 col_types = "cccc") |>
+            filter(!(.data$release == .env$release &
+                         .data$pipeline == .env$pipeline)) |>
+            bind_rows(new_row)
+    } else {
+        new_row
+    }
+
+    manifest |>
+        arrange(pipeline, release) |>
+        write_csv(manifest_path)
+
+    invisible(manifest)
+}
+
 # snapshot readers --------------------------------------------------------
+
+## Transparent reader for tidy snapshot files: the 2020 baseline exists
+## only as .rds, later snapshots are .csv, downloads from #2/#4 may arrive
+## compressed as .csv.gz (read_csv decompresses .gz transparently).
+
+read_snapshot <- function(path) {
+
+    ext <- tolower(tools::file_ext(sub("\\.gz$", "", path)))
+
+    if (tolower(tools::file_ext(path)) == "rds") {
+        as_tibble(readRDS(path))
+    } else if (ext == "csv") {
+        read_csv(path, show_col_types = FALSE)
+    } else {
+        stop("Unsupported snapshot format: ", basename(path),
+             " (expected .rds, .csv or .csv.gz)", call. = FALSE)
+    }
+}
 
 ## Raw survey data (gather_raw_data.R lineage). Countries without any data
 ## are stored as all-NA placeholder rows; those are not data points and are
@@ -118,14 +276,7 @@ summarise_diff_by <- function(diff, by) {
 
 read_raw_snapshot <- function(path, normalize = TRUE) {
 
-    data <- if (tolower(tools::file_ext(path)) == "rds") {
-        readRDS(path)
-    } else {
-        read_csv(path, show_col_types = FALSE)
-    }
-
-    data <- data |>
-        as_tibble() |>
+    data <- read_snapshot(path) |>
         filter(!(is.na(source) & is.na(type) & is.na(year) &
                      is.na(var_short) & is.na(value))) |>
         transmute(

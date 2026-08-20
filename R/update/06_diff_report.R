@@ -23,16 +23,16 @@ indicator_key <- c("iso3", "year", "residence", "var_short", "indicator_type")
 
 # snapshot manifest -------------------------------------------------------
 
-## Issue #1 will deliver data/derived_data/snapshots_manifest.csv; until then
-## this built-in registry lists every SDG-era release with the path where its
-## snapshot lives, or is expected to land once #1, #2 and #4 are done.
+## The built-in registry lists every SDG-era release with the path where its
+## snapshot lives, or is expected to land once #1, #2 and #4 are done. Rows
+## in data/derived_data/snapshots_manifest.csv (appended by the tidy
+## scripts, owned by #1) take precedence per release and pipeline; built-in
+## rows fill in the releases the manifest does not know yet, so unavailable
+## releases stay visible in the inventory.
 
 manifest_path <- here::here("data/derived_data/snapshots_manifest.csv")
 
-if (file.exists(manifest_path)) {
-    manifest <- read_csv(manifest_path, show_col_types = FALSE)
-} else {
-    manifest <- tribble(
+builtin_manifest <- tribble(
         ~release, ~pipeline, ~pull_date, ~path,
         "jmp2019", "raw", "2020-09-30",
         "data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds",
@@ -53,9 +53,15 @@ if (file.exists(manifest_path)) {
         "jmp2025", "indicators", NA,
         "data/derived_data/jmp2025_jmp_washdata_indicators.csv"
     )
+
+file_manifest <- if (file.exists(manifest_path)) {
+    read_csv(manifest_path, show_col_types = FALSE, col_types = "cccc")
+} else {
+    NULL
 }
 
-manifest <- manifest |>
+manifest <- bind_rows(file_manifest, builtin_manifest) |>
+    distinct(release, pipeline, .keep_all = TRUE) |>
     mutate(
         available = file.exists(here::here(path)),
         release = factor(release, levels = release_order)
