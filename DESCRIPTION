@@ -1,0 +1,23 @@
+Package: jmpinput
+Title: Input Data and Indicator Estimates from the WHO/UNICEF Joint
+    Monitoring Programme
+Version: 0.0.0.9000
+Authors@R: 
+    person("Lars", "Schöbitz", , "lschoebitz@ethz.ch", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2196-5015"))
+Description: Contains two data resources from the WHO/UNICEF Joint
+    Monitoring Programme (JMP) for Water Supply, Sanitation and Hygiene.
+    `jmpraw` holds the survey-level input data on sanitation that
+    underlies the JMP estimates, collected from the country files
+    published on <https://washdata.org>. `jmpindicators` holds the
+    modelled JMP indicator estimates for water, sanitation and hygiene
+    from the JMP world file. Both datasets are packaged from the JMP 2025
+    release.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Depends: 
+    R (>= 3.5)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
+LazyData: true
