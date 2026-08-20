@@ -38,8 +38,9 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site
-docs/
+# pkgdown site, except the committed update guide
+docs/*
+!docs/UPDATING.md
 
 # translation temp files
 po/*~
