@@ -1,0 +1,32 @@
+# ------------------------------------------------
+# CITATION.cff file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# ------------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "jmpdata" in publications use:'
+type: software
+license: CC-BY-4.0
+title: 'jmpdata: Input Data and Indicator Estimates from the WHO/UNICEF Joint Monitoring
+  Programme'
+version: 0.1.0
+abstract: Contains two data resources from the WHO/UNICEF Joint Monitoring Programme
+  (JMP) for Water Supply, Sanitation and Hygiene. `jmpraw` holds the survey-level
+  input data on sanitation that underlies the JMP estimates, collected from the country
+  files published on <https://washdata.org>. `jmpindicators` holds the modelled JMP
+  indicator estimates for water, sanitation and hygiene from the JMP world file. Both
+  datasets are packaged from the JMP 2025 release.
+authors:
+- family-names: Schöbitz
+  given-names: Lars
+  email: lschoebitz@ethz.ch
+  orcid: https://orcid.org/0000-0003-2196-5015
+repository-code: https://github.com/openwashdata/jmpdata
+url: https://github.com/openwashdata/jmpdata
+date-released: '2026-08-20'
+contact:
+- family-names: Schöbitz
+  given-names: Lars
+  email: lschoebitz@ethz.ch
+  orcid: https://orcid.org/0000-0003-2196-5015
+

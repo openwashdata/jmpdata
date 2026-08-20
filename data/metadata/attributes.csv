@@ -1,0 +1,22 @@
+directory,file_name,variable_name,variable_type,description
+data/,jmpindicators.rda,name,character,"Country, area or territory name as published in the JMP world file"
+data/,jmpindicators.rda,iso3,character,ISO 3166-1 alpha-3 country code
+data/,jmpindicators.rda,year,integer,Year of the modelled estimate
+data/,jmpindicators.rda,pop_t,numeric,"Total population in thousands, as used by the JMP model (named pop_n in pre-2025 world files)"
+data/,jmpindicators.rda,prop_u,numeric,"Share of the population living in urban areas, in percent"
+data/,jmpindicators.rda,arc_hyg_bas_u,numeric,Annual rate of change in urban basic hygiene coverage; retained as an identifier column from the legacy pipeline and all NA in this release
+data/,jmpindicators.rda,var_short,character,"JMP short variable code of the indicator, normalized to the legacy JMP vocabulary with the residence suffix removed (for example san_sm, wat_bas)"
+data/,jmpindicators.rda,percent,numeric,"Modelled coverage estimate, in percent of population"
+data/,jmpindicators.rda,residence,character,"Residence level of the estimate: national, rural or urban"
+data/,jmpindicators.rda,service,character,"WASH service area of the indicator: water, sanitation or hygiene"
+data/,jmpindicators.rda,indicator_type,character,"Indicator grouping: sanitation_technology, safely_managed_sanitation, sanitation_ladder, water_technology, safely_managed_drinking_water, water_ladder, hygiene_ladder or bathing_facilities"
+data/,jmpindicators.rda,indicator,character,"Indicator label within the grouping (for example Safely managed, Basic, Limited)"
+data/,jmpraw.rda,source,character,"Code of the data source underlying the data point (for example MICS, DHS, CEN), as published in the JMP country file"
+data/,jmpraw.rda,type,character,"Source type label (Survey, Census, Admin, Other); localized into the country language in the JMP 2025 release (for example Encuesta, Recensement)"
+data/,jmpraw.rda,year,numeric,Year of data collection
+data/,jmpraw.rda,var_short,character,JMP short variable code of the sanitation variable (for example s_imp_u)
+data/,jmpraw.rda,value,numeric,"Value of the variable, in percent of population"
+data/,jmpraw.rda,iso3,character,ISO 3166-1 alpha-3 country code
+data/,jmpraw.rda,var_long,character,"Label of the sanitation variable, as published in the JMP country file"
+data/,jmpraw.rda,residence,character,"Residence level of the variable: national, rural or urban"
+data/,jmpraw.rda,san_service_chain,factor,"Sanitation service chain stage of the variable: open defecation, sharing, user interface, containment, emptying, transport, FS treatment or WW treatment"

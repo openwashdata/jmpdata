@@ -1,0 +1,469 @@
+---
+title: "a bunch of data visualisations"
+subtitle: "created from WHO/UNICEF JMP raw data collection"
+author: "Lars Schöbitz"
+format: 
+  revealjs:
+    smaller: true
+    theme: slides.scss
+    transition: fade
+    slide-number: false
+    footer: "https://github.com/larnsce/washr"
+execute: 
+  echo: false
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(maps)
+library(tmap) 
+library(sf)
+library(gt)
+
+jmpraw <- read_rds(here::here("data-raw/derived_data/2022-10-19_jmp_sanitation_raw_data.rds")) %>% 
+    filter(year >= 2000, value >= 0) 
+
+
+top10 <- function(data) {
+    data  %>% 
+        arrange(desc(n)) %>% 
+        head(10)  %>% 
+        mutate(country = countrycode::countrycode(iso3, origin = "iso3c", destination = "country.name")) %>% 
+        select(country, n)
+}
+
+
+jmp_iso3_frequency <- jmpraw %>% 
+    count(iso3)
+
+jmp_iso3_user_interface_2015 <- jmpraw %>% 
+    filter(year >= 2015) %>% 
+    filter(san_service_chain == "user interface") %>% 
+    count(iso3, san_service_chain)
+
+jmp_iso3_emptying_2015 <- jmpraw %>% 
+    filter(year >= 2015) %>% 
+    filter(san_service_chain == "emptying") %>% 
+    count(iso3, san_service_chain)
+
+jmp_iso3_ww_treatment_2015 <- jmpraw %>% 
+    filter(year >= 2015) %>% 
+    filter(san_service_chain == "WW treatment") %>% 
+    count(iso3, san_service_chain)
+
+jmp_iso3_fs_treatment_2015 <- jmpraw %>% 
+    filter(year >= 2015) %>% 
+    filter(san_service_chain == "FS treatment") %>% 
+    count(iso3, san_service_chain)
+
+
+data("World")
+
+world_moll = st_transform(World, crs = "+proj=moll")
+
+tmap_mode("view")
+
+tmap_options(basemaps = "OpenStreetMap")
+
+tmap_mode("plot")
+
+```
+
+## R Data Package - Benefits
+
+- Data accessible as a single table for any analysis tool
+- Data can be imported to R using one command
+- Public website with detailed documentation
+    _ e.g. `washdata` R Package [https://katilingban.io/washdata/index.html](https://katilingban.io/washdata/index.html)
+
+## R Data Package - Sanitation {.smaller}
+
+- Data in long format (19,528 rows)
+- 9 variables
+
+```{r}
+
+jmpraw %>% 
+    relocate(iso3) %>%
+    relocate(value, .after = san_service_chain) %>% 
+    head(4) %>% 
+    knitr::kable(digits = 1)
+
+```
+
+## R Data Package - New Variables {.smaller}
+
+- `residence`: urban/rural/national
+- `san_service_chain` (Sanitation Service Chain):
+
+```{r}
+
+jmpraw %>% 
+    count(san_service_chain) %>% 
+    knitr::kable()
+
+```
+
+## R Data Package - Use Cases {.smaller auto-animate="true"}
+
+::: {.incremental}
+
+1. Using JMP methods to reproduce estimates and apply different models (Linda Karani - MSc Data Science)
+
+2. Writing an R Package with a function to produce estimates (and a function to produce service ladder plots) 
+
+
+```{r}
+#| eval: false
+#| echo: true
+#| fenced: true
+
+```
+
+:::
+
+## R Data Package - Use Cases {.smaller auto-animate="true"}
+
+1. Using JMP methods to reproduce estimates and apply different models (Linda Karani - MSc Data Science)
+
+2. Writing an R Package with a function to produce estimates (and a function to produce service ladder plots) 
+
+```{r}
+#| eval: false
+#| echo: true
+#| fenced: true
+
+estimate(iso3 = "AFG",           # default: all iso3 codes
+         year = 2010:2030,       # Single year or range of years
+         var_short = NULL,       # default: all variables (NULL)
+         residence = "national") # default: national
+
+```
+
+
+## R Data Package - Use Cases {.smaller auto-animate="true"}
+
+1. Using JMP methods to reproduce estimates and apply different models (Linda Karani - MSc Data Science)
+
+2. Writing an R Package with a function to produce estimates (and a function to produce service ladder plots) 
+
+```{r}
+#| eval: false
+#| echo: true
+#| fenced: true
+
+estimate(iso3 = "AFG",           # default: all iso3 codes
+         year = 2010:2030,       # Single year or range of years
+         var_short = NULL,       # default: all variables (NULL)
+         residence = "national") # default: national
+
+```
+
+3. Great potential for unforeseen use cases enabled by making the data readily accessible (research, teaching, joining with other data, etc.)
+
+## 
+
+```{r}
+
+world_moll %>% 
+    left_join(jmp_iso3_emptying_2015, by = c("iso_a3" = "iso3")) %>% 
+    filter(continent != "Antarctica") %>% 
+    tm_shape() +
+    tm_polygons(
+        col = "n", 
+        title = "No. of data points",
+        #legend.hist = TRUE,
+        #palette = "Oranges", 
+        style = "fixed",
+        contrast = c(0.1, 1),
+        breaks = c(1, 11, 21, 31),
+        #n = 4, 
+        textNA = "No Data",
+        colorNA = "grey90", 
+        lwd = 0.5
+    ) +
+    tm_layout(
+        main.title = "JMP raw data collection - Number of data points for 'emptying' since 2015",
+        main.title.position = "center",
+        title.position = c("left", "top"),
+        #legend.outside = TRUE,
+        scale = 1.5,
+        #inner.margins = c(0, .02, .02, .02),
+        #outer.margins = c(0, 0, 0, 0), frame = TRUE, 
+    ) 
+
+```
+
+##
+
+```{r}
+top10(jmp_iso3_emptying_2015) %>% 
+    knitr::kable(caption = "JMP raw data collection: Number of data points for 'emptying' since 2015")
+```
+
+## R Data Package - What's next?
+
+- Submission of proposal for further development to [ORD (Open Research Data) Programme of ETH Domain](https://ethrat.ch/wp-content/uploads/2022/10/Application-guidelines_TrackC-Contribute-projects-3rd-call-1.pdf) (15k in-kind + 15k ETH Board), due: 12th December
+- Submission of a proposal to Colorado WASH Symposium (focus on Linda's work), due: 25th November
+
+::: {.aside}
+https://ethrat.ch/wp-content/uploads/2022/10/Application-guidelines_TrackC-Contribute-projects-3rd-call-1.pdf
+::: 
+
+## Questions
+
+1. How are country files updated on the server? 
+    - How often? All together, or one by one as there is new data?
+
+2. The current database for raw data shows 379 different sources. They are all abbreviated. Do you have a table where all these abbreviations are spelled out?
+
+3. Ratio RS1
+
+> "Other ratios used for 'basic' indicators (RW1, RS1) are calculated using simple averages" - JMP Methodology, March 2018
+
+
+##
+
+```{r}
+jmpraw %>%
+    count(type, sort = TRUE) %>% 
+    knitr::kable()
+    
+```
+
+
+## 
+
+```{r}
+jmpraw %>% 
+    filter(!is.na(san_service_chain)) %>% 
+    count(year, san_service_chain) %>% 
+    group_by(year) %>% 
+    mutate(
+        prop = n / sum(n) * 100
+    ) %>%  
+    
+    ggplot(aes(x = year, y = prop, fill = san_service_chain)) +
+    geom_col() +
+    labs(
+        x = NULL,
+        y = NULL, 
+        title = "Proportion of data points along sanitation service chain",
+        subtitle = "For all countries since 2000",
+        fill = "Variable"
+    ) +
+    scale_fill_brewer(palette = "BrBG") +
+    theme_minimal(base_size = 18) +
+    theme(panel.grid.minor = element_blank())
+```
+
+##
+
+```{r}
+world_moll %>% 
+    left_join(jmp_iso3_frequency, by = c("iso_a3" = "iso3")) %>% 
+    filter(continent != "Antarctica") %>% 
+    tm_shape() +
+    tm_polygons(
+        col = "n", 
+        title = "No. of data points",
+        #legend.hist = TRUE,
+        #palette = "Oranges", 
+        style = "fixed",
+        contrast = c(0.1, 0.9),
+        breaks = c(1, 100, 250, 500),
+        #n = 4, 
+        textNA = "No Data",
+        colorNA = "grey80", 
+        lwd = 0.5
+    ) +
+    tm_layout(
+        main.title = "JMP raw data collection - Total number of data points since 2000",
+        main.title.position = "center",
+        title.position = c("left", "top"),
+        #legend.outside = TRUE,
+        scale = 1.5,
+        #inner.margins = c(0, .02, .02, .02),
+        #outer.margins = c(0, 0, 0, 0), frame = TRUE, 
+    )
+
+```
+
+## 
+
+```{r}
+top10(jmp_iso3_frequency) %>% 
+    knitr::kable()
+```
+
+##
+
+```{r}
+world_moll %>% 
+    left_join(jmp_iso3_user_interface_2015, by = c("iso_a3" = "iso3")) %>% 
+    filter(continent != "Antarctica") %>% 
+    tm_shape() +
+    tm_polygons(
+        col = "n", 
+        title = "No. of data points",
+        #legend.hist = TRUE,
+        #palette = "Oranges", 
+        style = "fixed",
+        contrast = c(0.1, 0.9),
+        breaks = c(1, 11, 21, 31),
+        #n = 4, 
+        textNA = "No Data",
+        colorNA = "grey80", 
+        lwd = 0.5
+    ) +
+    tm_layout(
+        main.title = "JMP raw data collection - Number of data points for 'user interface' since 2015",
+        main.title.position = "center",
+        title.position = c("left", "top"),
+        #legend.outside = TRUE,
+        scale = 1.5,
+        #inner.margins = c(0, .02, .02, .02),
+        #outer.margins = c(0, 0, 0, 0), frame = TRUE, 
+    ) 
+
+```
+
+## 
+
+```{r}
+top10(jmp_iso3_user_interface_2015) %>% 
+    knitr::kable()
+
+```
+
+##
+
+```{r}
+
+world_moll %>% 
+    left_join(jmp_iso3_emptying_2015, by = c("iso_a3" = "iso3")) %>% 
+    filter(continent != "Antarctica") %>% 
+    tm_shape() +
+    tm_polygons(
+        col = "n", 
+        title = "No. of data points",
+        #legend.hist = TRUE,
+        #palette = "Oranges", 
+        style = "fixed",
+        contrast = c(0.1, 1),
+        breaks = c(1, 11, 21, 31),
+        #n = 4, 
+        textNA = "No Data",
+        colorNA = "grey90", 
+        lwd = 0.5
+    ) +
+    tm_layout(
+        main.title = "JMP raw data collection - Number of data points for 'emptying' since 2015",
+        main.title.position = "center",
+        title.position = c("left", "top"),
+        #legend.outside = TRUE,
+        scale = 1.5,
+        #inner.margins = c(0, .02, .02, .02),
+        #outer.margins = c(0, 0, 0, 0), frame = TRUE, 
+    ) 
+
+```
+
+##
+
+```{r}
+top10(jmp_iso3_emptying_2015) %>% 
+    knitr::kable()
+```
+
+##
+
+```{r}
+
+world_moll %>% 
+    left_join(jmp_iso3_ww_treatment_2015, by = c("iso_a3" = "iso3")) %>% 
+    filter(continent != "Antarctica") %>% 
+    tm_shape() +
+    tm_polygons(
+        col = "n", 
+        title = "No. of data points",
+        #legend.hist = TRUE,
+        #palette = "Oranges", 
+        style = "fixed",
+        contrast = c(0.1, 1),
+        breaks = c(1, 3, 6, 20),
+        #n = 4, 
+        textNA = "No Data",
+        colorNA = "grey90", 
+        lwd = 0.5
+    ) +
+    tm_layout(
+        main.title = "JMP raw data collection - Number of data points for 'wastewater treatment' since 2015",
+        main.title.position = "center",
+        title.position = c("left", "top"),
+        #legend.outside = TRUE,
+        scale = 1.5,
+        #inner.margins = c(0, .02, .02, .02),
+        #outer.margins = c(0, 0, 0, 0), frame = TRUE, 
+    )
+```
+
+##
+
+```{r}
+top10(jmp_iso3_ww_treatment_2015) %>% 
+    knitr::kable()
+```
+
+
+##
+
+```{r}
+world_moll %>% 
+    left_join(jmp_iso3_fs_treatment_2015, by = c("iso_a3" = "iso3")) %>% 
+    filter(continent != "Antarctica") %>% 
+    tm_shape() +
+    tm_polygons(
+        col = "n", 
+        title = "No. of data points",
+        #legend.hist = TRUE,
+        #palette = "Oranges", 
+        style = "fixed",
+        contrast = c(0.1, 1),
+        breaks = c(1, 3, 6, 20),
+        #n = 4, 
+        textNA = "No Data",
+        colorNA = "grey90", 
+        lwd = 0.5
+    ) +
+    tm_layout(
+        main.title = "JMP raw data collection - Number of data points for 'faecal sludge treatment' since 2015",
+        main.title.position = "center",
+        title.position = c("left", "top"),
+        #legend.outside = TRUE,
+        scale = 1.5,
+        #inner.margins = c(0, .02, .02, .02),
+        #outer.margins = c(0, 0, 0, 0), frame = TRUE, 
+    )
+```
+
+## 
+
+```{r}
+top10(jmp_iso3_fs_treatment_2015) %>% 
+    knitr::kable()
+```
+
+## Thanks!
+
+**Data source:** washdata.org
+
+**Slides - source code:** https://github.com/larnsce/washr/blob/master/doc/slides/slides-jmp-raw-data-package.qmd
+
+**Slides - PDF download:** https://github.com/larnsce/washr/raw/master/doc/slides/slides-jmp-raw-data-package.pdf
+

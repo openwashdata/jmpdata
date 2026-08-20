@@ -1,0 +1,17 @@
+^jmpdata\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+^LICENSE\.md$
+^README\.Rmd$
+^CITATION\.cff$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^data/metadata$
+^vignettes/articles$
+^CONTRIBUTING\.md$
+^code_of_conduct\.md$
+^jmpdata\.Rcheck$
+^jmpdata.*\.tar\.gz$
+^jmpdata.*\.tgz$

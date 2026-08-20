@@ -1,0 +1,4 @@
+fileName,name,contentUrl,encodingFormat
+jmpraw.csv,jmpraw,https://raw.githubusercontent.com/openwashdata/jmpdata/main/inst/extdata/jmpraw.csv,csv
+jmpraw.xlsx,jmpraw,https://raw.githubusercontent.com/openwashdata/jmpdata/main/inst/extdata/jmpraw.xlsx,ooxml
+jmpindicators.csv.gz,jmpindicators,https://raw.githubusercontent.com/openwashdata/jmpdata/main/inst/extdata/jmpindicators.csv.gz,csv
