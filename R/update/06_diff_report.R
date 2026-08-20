@@ -348,6 +348,13 @@ lines <- c(
         "JMP 2019 release; the 2022-10-19 pull holds the JMP 2021 release."
     ),
     paste0(
+        "- Tidy indicator snapshots are normalized to the legacy variable ",
+        "vocabulary at tidy time (the JMP 2023/2025 world files renamed ",
+        "most variables, e.g. wat_basal for wat_bas, san_ns for san_od, ",
+        "suffix _t for _n), so var_short is comparable across releases in ",
+        "the indicator diffs."
+    ),
+    paste0(
         "- Countries without any data are stored as all-NA placeholder rows ",
         "in the raw snapshots; they are dropped before diffing."
     ),

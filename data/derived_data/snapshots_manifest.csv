@@ -3,7 +3,9 @@ jmp2017,,indicators,data/raw_data/snapshots/jmp2017/WLD.xlsx,wayback,input: not 
 jmp2019,2020-09-03,indicators,data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz,git-history,tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2019/WLD.xlsx
 jmp2021,2022-10-19,indicators,data/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz,live,jmp2021 indicators baseline; dated gzip copy of the file at commit 782603b
 jmp2021,2022-10-19,indicators,data/derived_data/jmp-washdata-indicators.csv,live,"alias: undated latest, overwritten by each release"
+jmp2023,2024-05-20,indicators,data/derived_data/2024-05-20_jmp_washdata_indicators.csv.gz,wayback,tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2023/WLD.xlsx
 jmp2023,2024-05-20,indicators,data/raw_data/snapshots/jmp2023/WLD.xlsx,wayback,"input: world file from Wayback capture 20240520144514 of http://washdata.org/data/country/WLD/download, max estimate year 2022; tidy with 04_tidy_indicators.R"
+jmp2025,2026-08-20,indicators,data/derived_data/2026-08-20_jmp_washdata_indicators.csv.gz,live,tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2025/WLD.xlsx
 jmp2025,2026-08-20,indicators,data/raw_data/snapshots/jmp2025/WLD.xlsx,live,"input: world file, max estimate year 2024; tidy with 04_tidy_indicators.R"
 jmp2019,2020-09-03,raw,data/derived_data/2020-09-03_jmp_sanitation_raw_data.rds,live,superseded by the 2020-09-30 pull
 jmp2019,2020-09-30,raw,data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds,live,"jmp2019-era raw baseline, as served 2020-09"

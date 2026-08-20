@@ -113,6 +113,11 @@ jmp_world_tidy <- jmp_world_wat_join |>
         values_to = "percent"
     ) |>
 
+    ## the 2025 release renamed the vocabulary; map onto the legacy names
+    ## so the hand-curated lookup resolves and tidy snapshots stay
+    ## schema-consistent across releases (no-op for pre-2023 files)
+    mutate(var_short = normalize_indicator_vars(var_short)) |>
+
     ## warns and records unknown variables before dropping them
     join_jmp_vars(jmp_vars,
                   output_dir = params$output_dir,
@@ -181,18 +186,27 @@ jmp_world_tidy_wat <- jmp_world_tidy |>
     ) |>
     filter(!is.na(indicator))
 
-## hygiene; the legacy script kept NA indicators here, preserved as-is
+## hygiene. The legacy script had no filter(!is.na(indicator)) here, but
+## every hygiene variable of the 2019/2022 files matches the ladder
+## pattern, so adding the filter for the two-type pivot below is a no-op
+## for reproducing the committed outputs (regression-checked). The
+## bathing indicator_type covers the JMP 2025 bathing facility variables
+## (issue #9).
 
 jmp_world_tidy_hyg <- jmp_world_tidy |>
     filter(service == "hygiene") |>
     mutate(hygiene_ladder = case_when(
         str_detect(var_short, "(bas|lim|nfac)$") ~ var_long
     )) |>
+    mutate(bathing_facilities = case_when(
+        str_detect(var_short, "(bfacw|bfac)$") ~ var_long
+    )) |>
     pivot_longer(
-        cols = all_of("hygiene_ladder"),
+        cols = all_of(c("hygiene_ladder", "bathing_facilities")),
         names_to = "indicator_type",
         values_to = "indicator"
-    )
+    ) |>
+    filter(!is.na(indicator))
 
 ## bind rows back together
 
