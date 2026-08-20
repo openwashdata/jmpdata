@@ -189,6 +189,38 @@ read_jmp_sheet <- function(path, sheet_name,
 
 # variable lookup join -----------------------------------------------------
 
+## Map the 2025 world-file vocabulary onto the legacy one before the
+## lookup join (issue #9): the JMP 2025 release renamed the national
+## suffix _n to _t and most variable stems. Mapping the names, rather
+## than duplicating 53 lookup rows under new names, keeps the hand-curated
+## labels authoritative and makes tidy indicator snapshots
+## schema-consistent across releases, which the diff engine requires.
+## Legacy names pass through untouched (all rules are anchored), so
+## re-tidying the 2019/2022 world files is a no-op. The renames were
+## reviewed and confirmed on issue #9; s_ns/s_od equivalence is verified
+## value-identical in the raw data.
+
+normalize_indicator_vars <- function(var_short) {
+
+    var_short |>
+        str_replace("_t$", "_n") |>
+        str_replace("^arc_wat_basal", "arc_wat_bas") |>
+        str_replace("^arc_san_basal", "arc_san_bas") |>
+        str_replace("^arc_san_ns_", "arc_san_od_") |>
+        str_replace("^wat_basal", "wat_bas") |>
+        str_replace("^san_basal", "san_bas") |>
+        str_replace("^wat_ns_", "wat_sur_") |>
+        str_replace("^san_ns_", "san_od_") |>
+        str_replace("^hyg_ns_", "hyg_nfac_") |>
+        str_replace("^wat_imp_prem", "wat_premises") |>
+        str_replace("^wat_imp_av", "wat_available") |>
+        str_replace("^wat_imp_qual", "wat_quality") |>
+        str_replace("^wat_imp_npip", "wat_npip") |>
+        str_replace("^san_othimp", "san_lat") |>
+        str_replace("^wat_arc_sm", "arc_wat_sm") |>
+        str_replace("^san_arc_sm", "arc_san_sm")
+}
+
 ## Left-join the hand-curated variable lookup, then warn about and record
 ## any var_short the lookup does not know BEFORE dropping it. New JMP
 ## releases are expected to introduce variables; the warning file is the

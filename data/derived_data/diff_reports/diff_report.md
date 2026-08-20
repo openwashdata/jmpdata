@@ -10,7 +10,9 @@ Generated on 2026-08-20 by `R/update/06_diff_report.R` ([issue #5](https://githu
 | jmp2019 | indicators | 2020-09-03 | data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz | git-history | yes | tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2019/WLD.xlsx                                                                                   |
 | jmp2021 | indicators | 2022-10-19 | data/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz | live        | yes | jmp2021 indicators baseline; dated gzip copy of the file at commit 782603b                                                                                     |
 | jmp2021 | indicators | 2022-10-19 | data/derived_data/jmp-washdata-indicators.csv               | live        | yes | alias: undated latest, overwritten by each release                                                                                                             |
+| jmp2023 | indicators | 2024-05-20 | data/derived_data/2024-05-20_jmp_washdata_indicators.csv.gz | wayback     | yes | tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2023/WLD.xlsx                                                                                   |
 | jmp2023 | indicators | 2024-05-20 | data/raw_data/snapshots/jmp2023/WLD.xlsx                    | wayback     | yes | input: world file from Wayback capture 20240520144514 of http://washdata.org/data/country/WLD/download, max estimate year 2022; tidy with 04_tidy_indicators.R |
+| jmp2025 | indicators | 2026-08-20 | data/derived_data/2026-08-20_jmp_washdata_indicators.csv.gz | live        | yes | tidied by 04_tidy_indicators.R from data/raw_data/snapshots/jmp2025/WLD.xlsx                                                                                   |
 | jmp2025 | indicators | 2026-08-20 | data/raw_data/snapshots/jmp2025/WLD.xlsx                    | live        | yes | input: world file, max estimate year 2024; tidy with 04_tidy_indicators.R                                                                                      |
 | jmp2019 | raw        | 2020-09-03 | data/derived_data/2020-09-03_jmp_sanitation_raw_data.rds    | live        | yes | superseded by the 2020-09-30 pull                                                                                                                              |
 | jmp2019 | raw        | 2020-09-30 | data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds    | live        | yes | jmp2019-era raw baseline, as served 2020-09                                                                                                                    |
@@ -177,6 +179,76 @@ Compared on the identity key `iso3 + year + residence + var_short + indicator_ty
 | 2019 | 16146 | 0 | 0 | 0 |
 | 2020 | 16146 | 0 | 0 | 0 |
 
+### jmp2021 vs jmp2023 (indicator estimates)
+
+Old snapshot: jmp2021 (pulled 2022-10-19, 339,066 data points). New snapshot: jmp2023 (pulled 2024-05-20, 369,771 data points).
+
+Compared on the identity key `iso3 + year + residence + var_short + indicator_type`: **32,154 added**, 1,449 removed, 137,957 changed, 199,660 unchanged.
+
+#### Data points by estimate year
+
+| year | n_added | n_removed | n_changed | n_unchanged |
+|---|---|---|---|---|
+| 2000 | 0 | 69 | 6169 | 9908 |
+| 2001 | 0 | 69 | 6266 | 9811 |
+| 2002 | 0 | 69 | 6335 | 9742 |
+| 2003 | 0 | 69 | 6347 | 9730 |
+| 2004 | 0 | 69 | 6413 | 9664 |
+| 2005 | 0 | 69 | 6417 | 9660 |
+| 2006 | 0 | 69 | 6499 | 9578 |
+| 2007 | 0 | 69 | 6555 | 9522 |
+| 2008 | 0 | 69 | 6565 | 9512 |
+| 2009 | 0 | 69 | 6601 | 9476 |
+| 2010 | 0 | 69 | 6680 | 9397 |
+| 2011 | 0 | 69 | 6702 | 9375 |
+| 2012 | 0 | 69 | 6701 | 9376 |
+| 2013 | 0 | 69 | 6792 | 9285 |
+| 2014 | 0 | 69 | 6805 | 9272 |
+| 2015 | 0 | 69 | 6772 | 9305 |
+| 2016 | 0 | 69 | 6851 | 9226 |
+| 2017 | 0 | 69 | 6741 | 9336 |
+| 2018 | 0 | 69 | 6702 | 9375 |
+| 2019 | 0 | 69 | 6539 | 9538 |
+| 2020 | 0 | 69 | 6505 | 9572 |
+| 2021 | 16077 | 0 | 0 | 0 |
+| 2022 | 16077 | 0 | 0 | 0 |
+
+### jmp2023 vs jmp2025 (indicator estimates)
+
+Old snapshot: jmp2023 (pulled 2024-05-20, 369,771 data points). New snapshot: jmp2025 (pulled 2026-08-20, 424,575 data points).
+
+Compared on the identity key `iso3 + year + residence + var_short + indicator_type`: **65,430 added**, 10,626 removed, 214,987 changed, 144,158 unchanged.
+
+#### Data points by estimate year
+
+| year | n_added | n_removed | n_changed | n_unchanged |
+|---|---|---|---|---|
+| 2000 | 1308 | 1035 | 8595 | 6447 |
+| 2001 | 1326 | 828 | 8706 | 6543 |
+| 2002 | 1344 | 621 | 8824 | 6632 |
+| 2003 | 1344 | 621 | 8847 | 6609 |
+| 2004 | 1344 | 621 | 8903 | 6553 |
+| 2005 | 1350 | 552 | 9051 | 6474 |
+| 2006 | 1362 | 414 | 9158 | 6505 |
+| 2007 | 1443 | 345 | 9236 | 6496 |
+| 2008 | 1449 | 276 | 9377 | 6424 |
+| 2009 | 1455 | 207 | 9476 | 6394 |
+| 2010 | 1455 | 207 | 9521 | 6349 |
+| 2011 | 1461 | 138 | 9680 | 6259 |
+| 2012 | 1461 | 138 | 9735 | 6204 |
+| 2013 | 1461 | 138 | 9772 | 6167 |
+| 2014 | 1461 | 138 | 9868 | 6071 |
+| 2015 | 1461 | 138 | 9843 | 6096 |
+| 2016 | 1461 | 138 | 9935 | 6004 |
+| 2017 | 1449 | 276 | 9784 | 6017 |
+| 2018 | 1419 | 621 | 9628 | 5828 |
+| 2019 | 1413 | 690 | 9511 | 5876 |
+| 2020 | 1407 | 759 | 9381 | 5937 |
+| 2021 | 1401 | 828 | 9190 | 6059 |
+| 2022 | 1395 | 897 | 8966 | 6214 |
+| 2023 | 16575 | 0 | 0 | 0 |
+| 2024 | 16425 | 0 | 0 | 0 |
+
 ## Caveats
 
 - A `changed` data point is not necessarily a corrected value: every JMP release re-models the entire 2000 to present series, so `changed` counts include expected model re-estimation of historical years. This applies above all to the indicator estimates.
@@ -185,5 +257,6 @@ Compared on the identity key `iso3 + year + residence + var_short + indicator_ty
 - Where two source editions collapse onto one normalized key with conflicting values (Poland "ES12"/"ES13", four data points), the newest edition is kept.
 - `data/derived_data/2022-10-18_jmp_sanitation_raw_data.csv` is byte-identical to the 2022-10-19 file and is treated as a duplicate, not a separate snapshot.
 - Release labels follow the JMP publication held at pull time: the 2020-09-30 pull predates the JMP 2021 update and therefore holds the JMP 2019 release; the 2022-10-19 pull holds the JMP 2021 release.
+- Tidy indicator snapshots are normalized to the legacy variable vocabulary at tidy time (the JMP 2023/2025 world files renamed most variables, e.g. wat_basal for wat_bas, san_ns for san_od, suffix _t for _n), so var_short is comparable across releases in the indicator diffs.
 - Countries without any data are stored as all-NA placeholder rows in the raw snapshots; they are dropped before diffing.
 

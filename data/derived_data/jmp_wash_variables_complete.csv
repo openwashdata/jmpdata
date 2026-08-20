@@ -112,3 +112,9 @@ name,var_short,var_long
 111,hyg_nfac_u,No facility
 112,sl,NA
 113,iso3,NA
+114,hyg_bfacw_n,Bathing facilities on premises with water
+115,hyg_bfacw_r,Bathing facilities on premises with water
+116,hyg_bfacw_u,Bathing facilities on premises with water
+117,hyg_bfac_n,Bathing facilities on premises
+118,hyg_bfac_r,Bathing facilities on premises
+119,hyg_bfac_u,Bathing facilities on premises
