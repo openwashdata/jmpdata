@@ -1,12 +1,12 @@
 # header ------------------------------------------------------------------
 
 # Tidy the modelled indicator estimates from a JMP world file (WLD.xlsx).
-# Parameterized port of R/gather/gather_jmp_data.R; the legacy script stays
+# Parameterized port of data-raw/gather/gather_jmp_data.R; the legacy script stays
 # untouched as the historical record.
 # Issue: https://github.com/openwashdata/jmpinput/issues/3
 #
 # Usage:
-#   JMP_RELEASE_ID=jmp2025 Rscript R/update/04_tidy_indicators.R
+#   JMP_RELEASE_ID=jmp2025 Rscript data-raw/update/04_tidy_indicators.R
 # Reads <JMP_SNAPSHOT_DIR>/WLD.xlsx, writes <JMP_PULL_DATE>-prefixed outputs
 # to <JMP_OUTPUT_DIR> and records the snapshot in snapshots_manifest.csv.
 # See jmp_update_params() in 00_functions.R for all parameters.
@@ -20,7 +20,7 @@
 
 suppressPackageStartupMessages(library(tidyverse))
 
-source(here::here("R/update/00_functions.R"))
+source(here::here("data-raw/update/00_functions.R"))
 
 # parameters ---------------------------------------------------------------
 
@@ -53,7 +53,7 @@ jmp_world_hyg <- read_jmp_sheet(wld_path, c("hyg", "Hygiene Data"),
 
 ## hand-curated variable names, maintained in the repo
 jmp_vars <- read_csv(
-    here::here("data/derived_data/jmp_wash_variables_complete.csv"),
+    here::here("data-raw/derived_data/jmp_wash_variables_complete.csv"),
     show_col_types = FALSE
 ) |>
     select(-name) |>
@@ -246,13 +246,13 @@ message("Written: ", file.path(params$output_dir, indicators_file))
 
 class_path <- c(
     file.path(params$snapshot_dir, "CLASS.xlsx"),
-    here::here("data/raw_data/CLASS.xlsx")
+    here::here("data-raw/raw_data/CLASS.xlsx")
 )
 class_path <- class_path[file.exists(class_path)][1]
 
 if (is.na(class_path)) {
 
-    warning("data/raw_data/CLASS.xlsx not found; skipping the income-group ",
+    warning("data-raw/raw_data/CLASS.xlsx not found; skipping the income-group ",
             "teaching subset. Download it from ",
             "https://datacatalogfiles.worldbank.org/ddh-published/0037712/DR0090755/CLASS.xlsx ",
             "(landing page: https://datahelpdesk.worldbank.org/knowledgebase/articles/906519).",

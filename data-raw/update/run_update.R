@@ -3,10 +3,10 @@
 # One-command orchestrator for the JMP data update: runs the pipeline
 # steps 01 to 06 in order, driven by the parameters below.
 # Issue: https://github.com/openwashdata/jmpinput/issues/6
-# See docs/UPDATING.md for the step-by-step version and prerequisites.
+# See data-raw/UPDATING.md for the step-by-step version and prerequisites.
 #
 # Usage: edit the parameters, then
-#   Rscript R/update/run_update.R
+#   Rscript data-raw/update/run_update.R
 #
 # Network steps are off by default; they must run on a local machine
 # (remote sandbox sessions cannot reach washdata.org or archive.org).
@@ -15,7 +15,7 @@
 
 suppressPackageStartupMessages(library(tidyverse))
 
-source(here::here("R/update/00_functions.R"))
+source(here::here("data-raw/update/00_functions.R"))
 
 # parameters ---------------------------------------------------------------
 
@@ -58,7 +58,7 @@ run_step <- function(script, env = character()) {
     }, " ====")
 
     tryCatch(
-        source(here::here("R/update", script)),
+        source(here::here("data-raw/update", script)),
         error = \(e) message("FAILED (continuing): ", conditionMessage(e))
     )
 
@@ -82,7 +82,7 @@ if (run_download_current) {
 for (i in seq_len(nrow(tidy_releases))) {
 
     release <- tidy_releases$release_id[i]
-    snapshot_dir <- here::here("data/raw_data/snapshots", release)
+    snapshot_dir <- here::here("data-raw/raw_data/snapshots", release)
 
     env <- c(
         JMP_RELEASE_ID = release,
@@ -112,5 +112,5 @@ if (run_diff_report) {
     run_step("06_diff_report.R")
 }
 
-message("\nUpdate run finished. See data/derived_data/diff_reports/ and ",
-        "data/derived_data/snapshots_manifest.csv.")
+message("\nUpdate run finished. See data-raw/derived_data/diff_reports/ and ",
+        "data-raw/derived_data/snapshots_manifest.csv.")

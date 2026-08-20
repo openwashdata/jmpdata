@@ -3,17 +3,17 @@
 # Diff report: per-collection-year data point counts between JMP releases
 # Issue: https://github.com/openwashdata/jmpinput/issues/5
 # Runs entirely on committed snapshots; no network access is needed.
-# Usage: Rscript R/update/06_diff_report.R
+# Usage: Rscript data-raw/update/06_diff_report.R
 
 # libraries ---------------------------------------------------------------
 
 suppressPackageStartupMessages(library(tidyverse))
 
-source(here::here("R/update/00_functions.R"))
+source(here::here("data-raw/update/00_functions.R"))
 
 # configuration -----------------------------------------------------------
 
-report_dir <- here::here("data/derived_data/diff_reports")
+report_dir <- here::here("data-raw/derived_data/diff_reports")
 dir.create(report_dir, recursive = TRUE, showWarnings = FALSE)
 
 release_order <- c("jmp2017", "jmp2019", "jmp2021", "jmp2023", "jmp2025")
@@ -23,7 +23,7 @@ indicator_key <- c("iso3", "year", "residence", "var_short", "indicator_type")
 
 # snapshot manifest -------------------------------------------------------
 
-## The registry data/derived_data/snapshots_manifest.csv (issue #1; seeded
+## The registry data-raw/derived_data/snapshots_manifest.csv (issue #1; seeded
 ## by 01_extract_git_history.R, appended to by the tidy scripts) is the
 ## source of truth. The built-in rows below fill in releases the manifest
 ## does not know yet, so unavailable releases stay visible in the
@@ -31,28 +31,28 @@ indicator_key <- c("iso3", "year", "residence", "var_short", "indicator_type")
 ## "alias", "superseded" or "input" (downloaded raw xlsx, not yet tidied)
 ## are listed in the inventory but excluded from diff chains.
 
-manifest_path <- here::here("data/derived_data/snapshots_manifest.csv")
+manifest_path <- here::here("data-raw/derived_data/snapshots_manifest.csv")
 
 builtin_manifest <- tribble(
         ~release_id, ~pipeline, ~snapshot_date, ~file,
         "jmp2019", "raw", "2020-09-30",
-        "data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds",
+        "data-raw/derived_data/2020-09-30_jmp_sanitation_raw_data.rds",
         "jmp2021", "raw", "2022-10-19",
-        "data/derived_data/2022-10-19_jmp_sanitation_raw_data.csv",
+        "data-raw/derived_data/2022-10-19_jmp_sanitation_raw_data.csv",
         "jmp2023", "raw", NA,
-        "data/derived_data/jmp2023_jmp_sanitation_raw_data.csv",
+        "data-raw/derived_data/jmp2023_jmp_sanitation_raw_data.csv",
         "jmp2025", "raw", NA,
-        "data/derived_data/jmp2025_jmp_sanitation_raw_data.csv",
+        "data-raw/derived_data/jmp2025_jmp_sanitation_raw_data.csv",
         "jmp2017", "indicators", NA,
-        "data/derived_data/jmp2017_jmp_washdata_indicators.csv",
+        "data-raw/derived_data/jmp2017_jmp_washdata_indicators.csv",
         "jmp2019", "indicators", NA,
-        "data/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz",
+        "data-raw/derived_data/2020-09-03_jmp_washdata_indicators.csv.gz",
         "jmp2021", "indicators", "2022-10-19",
-        "data/derived_data/jmp-washdata-indicators.csv",
+        "data-raw/derived_data/jmp-washdata-indicators.csv",
         "jmp2023", "indicators", NA,
-        "data/derived_data/jmp2023_jmp_washdata_indicators.csv",
+        "data-raw/derived_data/jmp2023_jmp_washdata_indicators.csv",
         "jmp2025", "indicators", NA,
-        "data/derived_data/jmp2025_jmp_washdata_indicators.csv"
+        "data-raw/derived_data/jmp2025_jmp_washdata_indicators.csv"
     ) |>
     mutate(source = NA_character_, notes = NA_character_)
 
@@ -261,7 +261,7 @@ lines <- c(
     "",
     paste0(
         "Generated on ", Sys.Date(),
-        " by `R/update/06_diff_report.R` ",
+        " by `data-raw/update/06_diff_report.R` ",
         "([issue #5](https://github.com/openwashdata/jmpinput/issues/5)). ",
         "All numbers come from committed snapshots; no network access is used. ",
         "The CSV files next to this report are the machine-readable source of ",
@@ -338,7 +338,7 @@ lines <- c(
         "the newest edition is kept."
     ),
     paste0(
-        "- `data/derived_data/2022-10-18_jmp_sanitation_raw_data.csv` is ",
+        "- `data-raw/derived_data/2022-10-18_jmp_sanitation_raw_data.csv` is ",
         "byte-identical to the 2022-10-19 file and is treated as a duplicate, ",
         "not a separate snapshot."
     ),

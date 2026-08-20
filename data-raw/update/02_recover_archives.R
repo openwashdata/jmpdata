@@ -14,7 +14,7 @@
 # bytes via the id_ URL form (avoiding Wayback-rewritten responses),
 # validates the result (xlsx magic bytes, readable wat sheet, max
 # estimate year matching the release) and stages it under gitignored
-# data/raw_data/snapshots/<release_id>/. Outcomes, including failures with
+# data-raw/raw_data/snapshots/<release_id>/. Outcomes, including failures with
 # their evidence, are recorded in snapshots_manifest.csv (source =
 # wayback, "input:" notes so they never enter diff chains untidied).
 #
@@ -23,20 +23,20 @@
 # countries) stops early when archive coverage is below 50 percent.
 #
 # Idempotent; must run on a machine that can reach web.archive.org.
-# Usage: Rscript R/update/02_recover_archives.R
+# Usage: Rscript data-raw/update/02_recover_archives.R
 
 # libraries ---------------------------------------------------------------
 
 suppressPackageStartupMessages(library(tidyverse))
 
-source(here::here("R/update/00_functions.R"))
+source(here::here("data-raw/update/00_functions.R"))
 
 options(timeout = 600)
 
 ## pause between archive.org requests, in seconds
 pacing <- 1
 
-manifest_path <- here::here("data/derived_data/snapshots_manifest.csv")
+manifest_path <- here::here("data-raw/derived_data/snapshots_manifest.csv")
 
 ## release windows: from first publication of the release to just before
 ## the next release replaced it on washdata.org
@@ -124,9 +124,9 @@ validate_world_file <- function(path, expected_max_year) {
 
 recover_world_file <- function(release_id, from, to, expected_max_year) {
 
-    snapshot_dir <- here::here("data/raw_data/snapshots", release_id)
+    snapshot_dir <- here::here("data-raw/raw_data/snapshots", release_id)
     wld_path <- file.path(snapshot_dir, "WLD.xlsx")
-    manifest_file <- file.path("data/raw_data/snapshots", release_id,
+    manifest_file <- file.path("data-raw/raw_data/snapshots", release_id,
                                "WLD.xlsx")
 
     if (is_xlsx(wld_path)) {
@@ -215,7 +215,7 @@ recover_world_file <- function(release_id, from, to, expected_max_year) {
 
 probe_country_files <- function(release_id, from, to, probe_cap = 20) {
 
-    wld_path <- here::here("data/raw_data/snapshots", release_id, "WLD.xlsx")
+    wld_path <- here::here("data-raw/raw_data/snapshots", release_id, "WLD.xlsx")
 
     if (!is_xlsx(wld_path)) {
         message(release_id, ": no world file, skipping country probe")
@@ -262,7 +262,7 @@ probe_country_files <- function(release_id, from, to, probe_cap = 20) {
         release_id = release_id,
         pipeline = "raw",
         snapshot_date = NA_character_,
-        file = file.path("data/raw_data/snapshots", release_id,
+        file = file.path("data-raw/raw_data/snapshots", release_id,
                          "country_files"),
         source = "wayback",
         notes = note

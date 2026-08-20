@@ -1,7 +1,7 @@
 # header ------------------------------------------------------------------
 
 # Download the current JMP release from washdata.org: the world file and
-# all ~230 country files, into gitignored data/raw_data/snapshots/<id>/.
+# all ~230 country files, into gitignored data-raw/raw_data/snapshots/<id>/.
 # Replaces the download logic embedded in the legacy gather scripts.
 # Issue: https://github.com/openwashdata/jmpinput/issues/4
 #
@@ -12,16 +12,16 @@
 # package explicitly avoids unnecessary load on it).
 #
 # Usage:
-#   Rscript R/update/03_download_current.R            # jmp2025 defaults
+#   Rscript data-raw/update/03_download_current.R            # jmp2025 defaults
 # then tidy the snapshot:
-#   JMP_RELEASE_ID=jmp2025 Rscript R/update/05_tidy_raw_data.R
-#   JMP_RELEASE_ID=jmp2025 Rscript R/update/04_tidy_indicators.R
+#   JMP_RELEASE_ID=jmp2025 Rscript data-raw/update/05_tidy_raw_data.R
+#   JMP_RELEASE_ID=jmp2025 Rscript data-raw/update/04_tidy_indicators.R
 
 # libraries ---------------------------------------------------------------
 
 suppressPackageStartupMessages(library(tidyverse))
 
-source(here::here("R/update/00_functions.R"))
+source(here::here("data-raw/update/00_functions.R"))
 
 # parameters ---------------------------------------------------------------
 
@@ -144,7 +144,7 @@ message("Done: ", n_ok, " of ", nrow(country_codes),
 ## "input" rows are listed in the inventory but excluded from diff chains;
 ## the tidy scripts (04/05) register the diffable snapshots
 
-manifest_path <- here::here("data/derived_data/snapshots_manifest.csv")
+manifest_path <- here::here("data-raw/derived_data/snapshots_manifest.csv")
 
 append_manifest_row(
     manifest_path,

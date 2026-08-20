@@ -1,13 +1,13 @@
 # header ------------------------------------------------------------------
 
 # Tidy the raw survey-level sanitation data from JMP country files.
-# Parameterized port of R/gather/gather_raw_data.R; the legacy script stays
+# Parameterized port of data-raw/gather/gather_raw_data.R; the legacy script stays
 # untouched as the historical record. This script does NOT download
 # anything; downloads are issue #4's job.
 # Issue: https://github.com/openwashdata/jmpinput/issues/3
 #
 # Usage:
-#   JMP_RELEASE_ID=jmp2025 Rscript R/update/05_tidy_raw_data.R
+#   JMP_RELEASE_ID=jmp2025 Rscript data-raw/update/05_tidy_raw_data.R
 # Reads <JMP_SNAPSHOT_DIR>/WLD.xlsx and <JMP_SNAPSHOT_DIR>/country_files/
 # (one <ISO3>.xlsx per country), writes <JMP_PULL_DATE>-prefixed outputs to
 # <JMP_OUTPUT_DIR> and records the snapshot in snapshots_manifest.csv.
@@ -17,7 +17,7 @@
 
 suppressPackageStartupMessages(library(tidyverse))
 
-source(here::here("R/update/00_functions.R"))
+source(here::here("data-raw/update/00_functions.R"))
 
 # parameters ---------------------------------------------------------------
 

@@ -38,18 +38,14 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site, except the committed update guide
-docs/*
-!docs/UPDATING.md
-
 # translation temp files
 po/*~
 
 # data dirs
-data/raw_data/country_files/*
+data-raw/raw_data/country_files/*
 # per-release raw xlsx inputs stay out of git (issue #1); the committed
 # WLD.xlsx / UGA.xlsx are the only surviving JMP-2021-era raw inputs
-data/raw_data/snapshots/
+data-raw/raw_data/snapshots/
 
 # Mac files
 

@@ -7,25 +7,25 @@
 # its output already exists. It
 #
 #   1. stages the jmp2019-era world file from commit a04e8bb into the
-#      gitignored data/raw_data/snapshots/jmp2019/,
+#      gitignored data-raw/raw_data/snapshots/jmp2019/,
 #   2. writes a one-time dated gzip copy of the current (jmp2021)
 #      indicators file, byte-identical under the gzip,
-#   3. seeds data/derived_data/snapshots_manifest.csv with every snapshot
+#   3. seeds data-raw/derived_data/snapshots_manifest.csv with every snapshot
 #      the repo currently holds,
 #   4. re-derives the jmp2019 indicators from the staged world file with
 #      the parameterized tidy pipeline (04_tidy_indicators.R), preferred
 #      over extracting the old derived CSV at c943c50 because the result
 #      is schema-consistent with the other releases.
 #
-# Usage: Rscript R/update/01_extract_git_history.R
+# Usage: Rscript data-raw/update/01_extract_git_history.R
 
 # libraries ---------------------------------------------------------------
 
 suppressPackageStartupMessages(library(tidyverse))
 
-source(here::here("R/update/00_functions.R"))
+source(here::here("data-raw/update/00_functions.R"))
 
-derived_dir <- here::here("data/derived_data")
+derived_dir <- here::here("data-raw/derived_data")
 manifest_path <- file.path(derived_dir, "snapshots_manifest.csv")
 
 # 1. stage the jmp2019 world file from git history --------------------------
@@ -35,7 +35,7 @@ manifest_path <- file.path(derived_dir, "snapshots_manifest.csv")
 
 jmp2019_commit <- "a04e8bb"
 jmp2019_date <- "2020-09-03"
-jmp2019_dir <- here::here("data/raw_data/snapshots/jmp2019")
+jmp2019_dir <- here::here("data-raw/raw_data/snapshots/jmp2019")
 jmp2019_wld <- file.path(jmp2019_dir, "WLD.xlsx")
 
 dir.create(jmp2019_dir, recursive = TRUE, showWarnings = FALSE)
@@ -88,28 +88,28 @@ seed <- function(...) {
 }
 
 seed("jmp2019", "raw", "2020-09-03",
-     "data/derived_data/2020-09-03_jmp_sanitation_raw_data.rds", "live",
+     "data-raw/derived_data/2020-09-03_jmp_sanitation_raw_data.rds", "live",
      "superseded by the 2020-09-30 pull")
 seed("jmp2019", "raw", "2020-09-30",
-     "data/derived_data/2020-09-30_jmp_sanitation_raw_data.rds", "live",
+     "data-raw/derived_data/2020-09-30_jmp_sanitation_raw_data.rds", "live",
      "jmp2019-era raw baseline, as served 2020-09")
 seed("jmp2021", "raw", "2022-10-18",
-     "data/derived_data/2022-10-18_jmp_sanitation_raw_data.csv", "live",
+     "data-raw/derived_data/2022-10-18_jmp_sanitation_raw_data.csv", "live",
      "duplicate of the 2022-10-19 csv (byte-identical)")
 seed("jmp2021", "raw", "2022-10-18",
-     "data/derived_data/2022-10-18_jmp_sanitation_raw_data.rds", "live",
+     "data-raw/derived_data/2022-10-18_jmp_sanitation_raw_data.rds", "live",
      "duplicate of the 2022-10-19 rds (byte-identical)")
 seed("jmp2021", "raw", "2022-10-19",
-     "data/derived_data/2022-10-19_jmp_sanitation_raw_data.csv", "live",
+     "data-raw/derived_data/2022-10-19_jmp_sanitation_raw_data.csv", "live",
      "jmp2021 raw baseline")
 seed("jmp2021", "raw", "2022-10-19",
-     "data/derived_data/2022-10-19_jmp_sanitation_raw_data.rds", "live",
+     "data-raw/derived_data/2022-10-19_jmp_sanitation_raw_data.rds", "live",
      "alias of the 2022-10-19 csv (same data, rds format)")
 seed("jmp2021", "indicators", "2022-10-19",
-     "data/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz", "live",
+     "data-raw/derived_data/2022-10-19_jmp-washdata-indicators.csv.gz", "live",
      "jmp2021 indicators baseline; dated gzip copy of the file at commit 782603b")
 seed("jmp2021", "indicators", "2022-10-19",
-     "data/derived_data/jmp-washdata-indicators.csv", "live",
+     "data-raw/derived_data/jmp-washdata-indicators.csv", "live",
      "alias: undated latest, overwritten by each release")
 
 message("Manifest seeded: ", manifest_path)
@@ -126,7 +126,7 @@ if (!file.exists(jmp2019_indicators)) {
 
     env_vars <- c(
         JMP_RELEASE_ID = "jmp2019",
-        JMP_SNAPSHOT_DIR = "data/raw_data/snapshots/jmp2019",
+        JMP_SNAPSHOT_DIR = "data-raw/raw_data/snapshots/jmp2019",
         JMP_PULL_DATE = jmp2019_date,
         JMP_SOURCE = "git-history",
         JMP_OUTPUT_COMPRESS = "true"
@@ -135,7 +135,7 @@ if (!file.exists(jmp2019_indicators)) {
     do.call(Sys.setenv, as.list(env_vars))
     on.exit(Sys.unsetenv(names(env_vars)), add = TRUE)
 
-    source(here::here("R/update/04_tidy_indicators.R"))
+    source(here::here("data-raw/update/04_tidy_indicators.R"))
 
 } else {
     message("jmp2019 indicators already derived, skipping")

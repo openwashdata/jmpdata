@@ -1,9 +1,9 @@
 # header ------------------------------------------------------------------
 
-# Shared functions for the JMP data update pipeline (R/update/)
+# Shared functions for the JMP data update pipeline (data-raw/update/)
 # Issue: https://github.com/openwashdata/jmpinput/issues/5
-# The legacy R/gather/ scripts stay untouched as the historical record;
-# new work lives in R/update/.
+# The legacy data-raw/gather/ scripts stay untouched as the historical record;
+# new work lives in data-raw/update/.
 
 # diff engine -------------------------------------------------------------
 
@@ -106,9 +106,9 @@ summarise_diff_by <- function(diff, by) {
 ##
 ##   JMP_RELEASE_ID   release being tidied (default "jmp2025")
 ##   JMP_SNAPSHOT_DIR directory holding the downloaded files for the release
-##                    (default data/raw_data/snapshots/<release_id>)
+##                    (default data-raw/raw_data/snapshots/<release_id>)
 ##   JMP_OUTPUT_DIR   where tidy outputs and the manifest go
-##                    (default data/derived_data)
+##                    (default data-raw/derived_data)
 ##   JMP_PULL_DATE    download date used to prefix output files
 ##                    (default today; set to 2022-10-19 when re-tidying the
 ##                    committed 2022 pull)
@@ -119,9 +119,9 @@ jmp_update_params <- function() {
 
     snapshot_dir <- Sys.getenv(
         "JMP_SNAPSHOT_DIR",
-        file.path("data/raw_data/snapshots", release_id)
+        file.path("data-raw/raw_data/snapshots", release_id)
     )
-    output_dir <- Sys.getenv("JMP_OUTPUT_DIR", "data/derived_data")
+    output_dir <- Sys.getenv("JMP_OUTPUT_DIR", "data-raw/derived_data")
 
     ## relative paths resolve against the repo root; absolute paths pass
     ## through (here::here() would mangle them). output_dir_label keeps the
@@ -228,7 +228,7 @@ normalize_indicator_vars <- function(var_short) {
 ## silent filter(!is.na(var_long)).
 
 join_jmp_vars <- function(data, lookup,
-                          output_dir = "data/derived_data",
+                          output_dir = "data-raw/derived_data",
                           pull_date = as.character(Sys.Date())) {
 
     joined <- data |>
@@ -255,13 +255,13 @@ join_jmp_vars <- function(data, lookup,
                  " var_short values in this snapshot; the release ",
                  "vocabulary has changed. Unmatched list written to ",
                  unmatched_path, ". Hand-extend ",
-                 "data/derived_data/jmp_wash_variables_complete.csv and ",
+                 "data-raw/derived_data/jmp_wash_variables_complete.csv and ",
                  "re-run.", call. = FALSE)
         }
 
         warning(nrow(unmatched), " var_short value(s) not in the variable ",
                 "lookup were dropped; written to ", unmatched_path,
-                ". Extend data/derived_data/jmp_wash_variables_complete.csv ",
+                ". Extend data-raw/derived_data/jmp_wash_variables_complete.csv ",
                 "and re-run.", call. = FALSE)
     }
 
