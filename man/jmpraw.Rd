@@ -14,8 +14,8 @@ A tibble with 26926 rows and 9 variables
 \item{value}{Value of the variable, in percent of population}
 \item{iso3}{ISO 3166-1 alpha-3 country code}
 \item{var_long}{Label of the sanitation variable, as published in the JMP country file}
-\item{residence}{Residence level of the variable (legacy label): national, rural or urban. Derived from an unanchored match on var_short, so 4,805 rows carry the wrong level (for example s_lat_nemp_u is labelled national); kept unchanged for comparability with earlier releases. Use residence_std for analysis}
-\item{residence_std}{Residence level of the variable, derived from the suffix of var_short (_t or _n national, _r rural, _u urban): national, rural or urban. Corrects the legacy residence column}
+\item{residence}{Residence level of the variable, derived from the suffix of var_short (_t or _n national, _r rural, _u urban): national, rural or urban. Corrected in version 0.2.0; earlier versions matched _n, _r and _u anywhere in the code and gave the wrong level for 4,805 rows (see residence_legacy)}
+\item{residence_legacy}{Legacy residence level, kept for comparability with versions before 0.2.0: national, rural or urban. Derived from an unanchored match on var_short, so 4,805 rows differ from residence (for example s_lat_nemp_u is national here and urban in residence). Do not use for analysis}
 \item{san_service_chain}{Sanitation service chain stage of the variable: open defecation, sharing, user interface, containment, emptying, transport, FS treatment or WW treatment}
 }
 }

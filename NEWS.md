@@ -1,18 +1,25 @@
-# jmpdata 0.1.1
+# jmpdata 0.2.0
 
-- `jmpraw` gains a new column `residence_std` with the residence level
-  derived from the suffix of `var_short` (`_t` or `_n` national, `_r`
-  rural, `_u` urban). The legacy `residence` column matched `_n`, `_r`
-  and `_u` anywhere in the code, so 4,805 of 26,926 rows had the wrong
-  level (for example `s_lat_nemp_u` was labelled national and
-  `s_sew_rtp_t` rural). Use `residence_std` for any urban and rural
-  analysis (#23).
-- The legacy `residence` column is unchanged, so earlier results and
-  the pipeline diff reports stay comparable.
+## Breaking change: values of `residence` in `jmpraw`
+
+- The `residence` column of `jmpraw` is corrected and now changes
+  value for 4,805 of 26,926 rows (17.8 percent). It is derived from the
+  suffix of `var_short` (`_t` or `_n` national, `_r` rural, `_u`
+  urban). Before, `_n`, `_r` and `_u` were matched anywhere in the
+  code, so a code such as `s_lat_nemp_u` was labelled national and
+  `s_sew_rtp_t` rural (#23).
+- Changed rows, old value to new value: national to rural 2,086;
+  national to urban 2,108; rural to national 595; rural to urban 16.
+  The other 22,120 rows are unchanged. Affected are all open
+  defecation (`s_ns_*`), all not emptied (`*_nemp_*`), and the sewer
+  transport and containment variables.
+- The new column `residence_legacy` keeps the old values, so earlier
+  results can be reproduced and compared. Do not use it for analysis.
 - The derivation lives in `derive_residence()` in
   `data-raw/update/00_functions.R` and is used by
-  `data-raw/update/05_tidy_raw_data.R`.
-- `inst/extdata/jmpraw.csv` and `jmpraw.xlsx` include the new column.
+  `data-raw/update/05_tidy_raw_data.R`. `jmpindicators` was already
+  correct and is unchanged.
+- `inst/extdata/jmpraw.csv` and `jmpraw.xlsx` include both columns.
 
 # jmpdata 0.1.0
 

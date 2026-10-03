@@ -1,4 +1,4 @@
-var_short,var_long,residence,residence_std,san_service_chain
+var_short,var_long,residence,residence_legacy,san_service_chain
 s_imp_r,Improved,rural,rural,user interface
 s_imp_t,Improved,national,national,user interface
 s_imp_u,Improved,urban,urban,user interface
@@ -17,15 +17,15 @@ s_lat_edl_u,Latrines: emptied and discharged locally,urban,urban,emptying
 s_lat_ero_r,Latrines: emptied and removed offsite,rural,rural,emptying
 s_lat_ero_t,Latrines: emptied and removed offsite,national,national,emptying
 s_lat_ero_u,Latrines: emptied and removed offsite,urban,urban,emptying
-s_lat_nemp_r,Latrines: not emptied,national,rural,emptying
+s_lat_nemp_r,Latrines: not emptied,rural,national,emptying
 s_lat_nemp_t,Latrines: not emptied,national,national,emptying
-s_lat_nemp_u,Latrines: not emptied,national,urban,emptying
+s_lat_nemp_u,Latrines: not emptied,urban,national,emptying
 s_lat_r,Latrines and other,rural,rural,user interface
 s_lat_t,Latrines and other,national,national,user interface
 s_lat_u,Latrines and other,urban,urban,user interface
-s_ns_r,Open defecation,national,rural,open defecation
+s_ns_r,Open defecation,rural,national,open defecation
 s_ns_t,Open defecation,national,national,open defecation
-s_ns_u,Open defecation,national,urban,open defecation
+s_ns_u,Open defecation,urban,national,open defecation
 s_sep_con_r,Septic: contained,rural,rural,containment
 s_sep_con_t,Septic: contained,national,national,containment
 s_sep_con_u,Septic: contained,urban,urban,containment
@@ -41,19 +41,19 @@ s_sep_edl_u,Septic: emptied and discharged locally,urban,urban,emptying
 s_sep_ero_r,Septic: emptied and removed offsite,rural,rural,emptying
 s_sep_ero_t,Septic: emptied and removed offsite,national,national,emptying
 s_sep_ero_u,Septic: emptied and removed offsite,urban,urban,emptying
-s_sep_nemp_r,Septic: not emptied,national,rural,emptying
+s_sep_nemp_r,Septic: not emptied,rural,national,emptying
 s_sep_nemp_t,Septic: not emptied,national,national,emptying
-s_sep_nemp_u,Septic: not emptied,national,urban,emptying
+s_sep_nemp_u,Septic: not emptied,urban,national,emptying
 s_sep_r,Septic tanks,rural,rural,user interface
 s_sep_t,Septic tanks,national,national,user interface
 s_sep_u,Septic tanks,urban,urban,user interface
-s_sew_net_r,Wastewater enters network,national,rural,containment
+s_sew_net_r,Wastewater enters network,rural,national,containment
 s_sew_net_t,Wastewater enters network,national,national,containment
-s_sew_net_u,Wastewater enters network,national,urban,containment
+s_sew_net_u,Wastewater enters network,urban,national,containment
 s_sew_r,Sewer connection,rural,rural,user interface
 s_sew_rtp_r,Wastewater reaches treatment plant,rural,rural,transport
-s_sew_rtp_t,Wastewater reaches treatment plant,rural,national,transport
-s_sew_rtp_u,Wastewater reaches treatment plant,rural,urban,transport
+s_sew_rtp_t,Wastewater reaches treatment plant,national,rural,transport
+s_sew_rtp_u,Wastewater reaches treatment plant,urban,rural,transport
 s_sew_t,Sewer connection,national,national,user interface
 s_sew_u,Sewer connection,urban,urban,user interface
 s_shared_r,Shared,rural,rural,sharing
