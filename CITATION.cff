@@ -9,7 +9,7 @@ type: software
 license: CC-BY-4.0
 title: 'jmpdata: Input Data and Indicator Estimates from the WHO/UNICEF Joint Monitoring
   Programme'
-version: 0.1.0
+version: 0.2.0
 abstract: Contains two data resources from the WHO/UNICEF Joint Monitoring Programme
   (JMP) for Water Supply, Sanitation and Hygiene. `jmpraw` holds the survey-level
   input data on sanitation that underlies the JMP estimates, collected from the country

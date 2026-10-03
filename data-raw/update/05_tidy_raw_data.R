@@ -105,16 +105,19 @@ var_list_san <- var_list |>
     filter(str_starts(var_short, "s_")) |>
     select(var_short, var_long) |>
     arrange(var_short) |>
-    ## the unanchored _n/_r/_u detection reproduces the legacy labels,
-    ## including their quirks (s_sep_nemp_r is "national" in the committed
-    ## 2022 output); the _t line is appended for the 2025 vocabulary where
-    ## _t (total) replaced _n, and changes nothing for older releases
-    mutate(residence = case_when(
+    ## residence is derived from the anchored suffix (issue #23), so
+    ## s_lat_nemp_u is urban and s_sew_rtp_t is national
+    mutate(residence = derive_residence(var_short)) |>
+    ## residence_legacy keeps the old unanchored _n/_r/_u detection, which
+    ## reproduces the legacy labels including their quirks (s_sep_nemp_r is
+    ## "national" in the committed 2022 output), for comparability; the _t
+    ## line is appended for the 2025 vocabulary where _t (total) replaced _n
+    mutate(residence_legacy = case_when(
         str_detect(var_short, "_n") ~ "national",
         str_detect(var_short, "_r") ~ "rural",
         str_detect(var_short, "_u") ~ "urban",
         str_detect(var_short, "_t") ~ "national"
-    )) |>
+    ), .after = residence) |>
     mutate(san_service_chain = case_when(
         str_detect(var_short, "od") ~ "open defecation",
         str_detect(var_short, "imp") ~ "user interface",
