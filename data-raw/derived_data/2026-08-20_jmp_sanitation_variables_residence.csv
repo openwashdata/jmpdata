@@ -1,67 +1,67 @@
-var_short,var_long,residence,san_service_chain
-s_imp_r,Improved,rural,user interface
-s_imp_t,Improved,national,user interface
-s_imp_u,Improved,urban,user interface
-s_lat_con_r,Latrines: contained,rural,containment
-s_lat_con_t,Latrines: contained,national,containment
-s_lat_con_u,Latrines: contained,urban,containment
-s_lat_dtp_r,Latrines: delivered to treatment plant,rural,transport
-s_lat_dtp_t,Latrines: delivered to treatment plant,national,transport
-s_lat_dtp_u,Latrines: delivered to treatment plant,urban,transport
-s_lat_ebo_r,Latrines: emptied and buried onsite,rural,emptying
-s_lat_ebo_t,Latrines: emptied and buried onsite,national,emptying
-s_lat_ebo_u,Latrines: emptied and buried onsite,urban,emptying
-s_lat_edl_r,Latrines: emptied and discharged locally,rural,emptying
-s_lat_edl_t,Latrines: emptied and discharged locally,national,emptying
-s_lat_edl_u,Latrines: emptied and discharged locally,urban,emptying
-s_lat_ero_r,Latrines: emptied and removed offsite,rural,emptying
-s_lat_ero_t,Latrines: emptied and removed offsite,national,emptying
-s_lat_ero_u,Latrines: emptied and removed offsite,urban,emptying
-s_lat_nemp_r,Latrines: not emptied,national,emptying
-s_lat_nemp_t,Latrines: not emptied,national,emptying
-s_lat_nemp_u,Latrines: not emptied,national,emptying
-s_lat_r,Latrines and other,rural,user interface
-s_lat_t,Latrines and other,national,user interface
-s_lat_u,Latrines and other,urban,user interface
-s_ns_r,Open defecation,national,open defecation
-s_ns_t,Open defecation,national,open defecation
-s_ns_u,Open defecation,national,open defecation
-s_sep_con_r,Septic: contained,rural,containment
-s_sep_con_t,Septic: contained,national,containment
-s_sep_con_u,Septic: contained,urban,containment
-s_sep_dtp_r,Septic: delivered to treatment plant,rural,transport
-s_sep_dtp_t,Septic: delivered to treatment plant,national,transport
-s_sep_dtp_u,Septic: delivered to treatment plant,urban,transport
-s_sep_ebo_r,Septic: emptied and buried onsite,rural,emptying
-s_sep_ebo_t,Septic: emptied and buried onsite,national,emptying
-s_sep_ebo_u,Septic: emptied and buried onsite,urban,emptying
-s_sep_edl_r,Septic: emptied and discharged locally,rural,emptying
-s_sep_edl_t,Septic: emptied and discharged locally,national,emptying
-s_sep_edl_u,Septic: emptied and discharged locally,urban,emptying
-s_sep_ero_r,Septic: emptied and removed offsite,rural,emptying
-s_sep_ero_t,Septic: emptied and removed offsite,national,emptying
-s_sep_ero_u,Septic: emptied and removed offsite,urban,emptying
-s_sep_nemp_r,Septic: not emptied,national,emptying
-s_sep_nemp_t,Septic: not emptied,national,emptying
-s_sep_nemp_u,Septic: not emptied,national,emptying
-s_sep_r,Septic tanks,rural,user interface
-s_sep_t,Septic tanks,national,user interface
-s_sep_u,Septic tanks,urban,user interface
-s_sew_net_r,Wastewater enters network,national,containment
-s_sew_net_t,Wastewater enters network,national,containment
-s_sew_net_u,Wastewater enters network,national,containment
-s_sew_r,Sewer connection,rural,user interface
-s_sew_rtp_r,Wastewater reaches treatment plant,rural,transport
-s_sew_rtp_t,Wastewater reaches treatment plant,rural,transport
-s_sew_rtp_u,Wastewater reaches treatment plant,rural,transport
-s_sew_t,Sewer connection,national,user interface
-s_sew_u,Sewer connection,urban,user interface
-s_shared_r,Shared,rural,sharing
-s_shared_t,Shared,national,sharing
-s_shared_u,Shared,urban,sharing
-s_treat_fstp_r,Treated at faecal sludge treatment plant,rural,FS treatment
-s_treat_fstp_t,Treated at faecal sludge treatment plant,national,FS treatment
-s_treat_fstp_u,Treated at faecal sludge treatment plant,urban,FS treatment
-s_treat_wtp_r,Treated at wastewater treatment plant,rural,WW treatment
-s_treat_wtp_t,Treated at wastewater treatment plant,national,WW treatment
-s_treat_wtp_u,Treated at wastewater treatment plant,urban,WW treatment
+var_short,var_long,residence,residence_std,san_service_chain
+s_imp_r,Improved,rural,rural,user interface
+s_imp_t,Improved,national,national,user interface
+s_imp_u,Improved,urban,urban,user interface
+s_lat_con_r,Latrines: contained,rural,rural,containment
+s_lat_con_t,Latrines: contained,national,national,containment
+s_lat_con_u,Latrines: contained,urban,urban,containment
+s_lat_dtp_r,Latrines: delivered to treatment plant,rural,rural,transport
+s_lat_dtp_t,Latrines: delivered to treatment plant,national,national,transport
+s_lat_dtp_u,Latrines: delivered to treatment plant,urban,urban,transport
+s_lat_ebo_r,Latrines: emptied and buried onsite,rural,rural,emptying
+s_lat_ebo_t,Latrines: emptied and buried onsite,national,national,emptying
+s_lat_ebo_u,Latrines: emptied and buried onsite,urban,urban,emptying
+s_lat_edl_r,Latrines: emptied and discharged locally,rural,rural,emptying
+s_lat_edl_t,Latrines: emptied and discharged locally,national,national,emptying
+s_lat_edl_u,Latrines: emptied and discharged locally,urban,urban,emptying
+s_lat_ero_r,Latrines: emptied and removed offsite,rural,rural,emptying
+s_lat_ero_t,Latrines: emptied and removed offsite,national,national,emptying
+s_lat_ero_u,Latrines: emptied and removed offsite,urban,urban,emptying
+s_lat_nemp_r,Latrines: not emptied,national,rural,emptying
+s_lat_nemp_t,Latrines: not emptied,national,national,emptying
+s_lat_nemp_u,Latrines: not emptied,national,urban,emptying
+s_lat_r,Latrines and other,rural,rural,user interface
+s_lat_t,Latrines and other,national,national,user interface
+s_lat_u,Latrines and other,urban,urban,user interface
+s_ns_r,Open defecation,national,rural,open defecation
+s_ns_t,Open defecation,national,national,open defecation
+s_ns_u,Open defecation,national,urban,open defecation
+s_sep_con_r,Septic: contained,rural,rural,containment
+s_sep_con_t,Septic: contained,national,national,containment
+s_sep_con_u,Septic: contained,urban,urban,containment
+s_sep_dtp_r,Septic: delivered to treatment plant,rural,rural,transport
+s_sep_dtp_t,Septic: delivered to treatment plant,national,national,transport
+s_sep_dtp_u,Septic: delivered to treatment plant,urban,urban,transport
+s_sep_ebo_r,Septic: emptied and buried onsite,rural,rural,emptying
+s_sep_ebo_t,Septic: emptied and buried onsite,national,national,emptying
+s_sep_ebo_u,Septic: emptied and buried onsite,urban,urban,emptying
+s_sep_edl_r,Septic: emptied and discharged locally,rural,rural,emptying
+s_sep_edl_t,Septic: emptied and discharged locally,national,national,emptying
+s_sep_edl_u,Septic: emptied and discharged locally,urban,urban,emptying
+s_sep_ero_r,Septic: emptied and removed offsite,rural,rural,emptying
+s_sep_ero_t,Septic: emptied and removed offsite,national,national,emptying
+s_sep_ero_u,Septic: emptied and removed offsite,urban,urban,emptying
+s_sep_nemp_r,Septic: not emptied,national,rural,emptying
+s_sep_nemp_t,Septic: not emptied,national,national,emptying
+s_sep_nemp_u,Septic: not emptied,national,urban,emptying
+s_sep_r,Septic tanks,rural,rural,user interface
+s_sep_t,Septic tanks,national,national,user interface
+s_sep_u,Septic tanks,urban,urban,user interface
+s_sew_net_r,Wastewater enters network,national,rural,containment
+s_sew_net_t,Wastewater enters network,national,national,containment
+s_sew_net_u,Wastewater enters network,national,urban,containment
+s_sew_r,Sewer connection,rural,rural,user interface
+s_sew_rtp_r,Wastewater reaches treatment plant,rural,rural,transport
+s_sew_rtp_t,Wastewater reaches treatment plant,rural,national,transport
+s_sew_rtp_u,Wastewater reaches treatment plant,rural,urban,transport
+s_sew_t,Sewer connection,national,national,user interface
+s_sew_u,Sewer connection,urban,urban,user interface
+s_shared_r,Shared,rural,rural,sharing
+s_shared_t,Shared,national,national,sharing
+s_shared_u,Shared,urban,urban,sharing
+s_treat_fstp_r,Treated at faecal sludge treatment plant,rural,rural,FS treatment
+s_treat_fstp_t,Treated at faecal sludge treatment plant,national,national,FS treatment
+s_treat_fstp_u,Treated at faecal sludge treatment plant,urban,urban,FS treatment
+s_treat_wtp_r,Treated at wastewater treatment plant,rural,rural,WW treatment
+s_treat_wtp_t,Treated at wastewater treatment plant,national,national,WW treatment
+s_treat_wtp_u,Treated at wastewater treatment plant,urban,urban,WW treatment

@@ -115,6 +115,11 @@ var_list_san <- var_list |>
         str_detect(var_short, "_u") ~ "urban",
         str_detect(var_short, "_t") ~ "national"
     )) |>
+    ## residence_std is the correctly derived residence (issue #23): the
+    ## suffix is anchored, so s_lat_nemp_u is urban and s_sew_rtp_t is
+    ## national. The legacy residence column above is kept unchanged.
+    mutate(residence_std = derive_residence(var_short),
+           .after = residence) |>
     mutate(san_service_chain = case_when(
         str_detect(var_short, "od") ~ "open defecation",
         str_detect(var_short, "imp") ~ "user interface",
