@@ -99,6 +99,22 @@ summarise_diff_by <- function(diff, by) {
         arrange(across(all_of(by)))
 }
 
+# residence from variable code ---------------------------------------------
+
+## Residence level from the suffix of a JMP short variable code. The
+## patterns are anchored at the end, so a stem that contains _n, _r or _u
+## (for example s_lat_nemp_u, s_sew_rtp_t) cannot match the wrong level.
+## _t (total, 2025 vocabulary) and _n (national, older releases) are both
+## national. Codes without a recognised suffix and NA give NA.
+
+derive_residence <- function(var_short) {
+    dplyr::case_when(
+        stringr::str_detect(var_short, "_(t|n)$") ~ "national",
+        stringr::str_detect(var_short, "_r$") ~ "rural",
+        stringr::str_detect(var_short, "_u$") ~ "urban"
+    )
+}
+
 # update pipeline parameters ----------------------------------------------
 
 ## Shared parameter block for the tidy scripts (04, 05). Everything is set

@@ -18,5 +18,6 @@ data/,jmpraw.rda,var_short,character,JMP short variable code of the sanitation v
 data/,jmpraw.rda,value,numeric,"Value of the variable, in percent of population"
 data/,jmpraw.rda,iso3,character,ISO 3166-1 alpha-3 country code
 data/,jmpraw.rda,var_long,character,"Label of the sanitation variable, as published in the JMP country file"
-data/,jmpraw.rda,residence,character,"Residence level of the variable: national, rural or urban"
+data/,jmpraw.rda,residence,character,"Residence level of the variable, derived from the suffix of var_short (_t or _n national, _r rural, _u urban): national, rural or urban. Corrected in version 0.2.0; earlier versions matched _n, _r and _u anywhere in the code and gave the wrong level for 4,805 rows (see residence_legacy)"
+data/,jmpraw.rda,residence_legacy,character,"Legacy residence level, kept for comparability with versions before 0.2.0: national, rural or urban. Derived from an unanchored match on var_short, so 4,805 rows differ from residence (for example s_lat_nemp_u is national here and urban in residence). Do not use for analysis"
 data/,jmpraw.rda,san_service_chain,factor,"Sanitation service chain stage of the variable: open defecation, sharing, user interface, containment, emptying, transport, FS treatment or WW treatment"
