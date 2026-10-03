@@ -10,7 +10,7 @@
   `s_sew_rtp_t` rural (#23).
 - Changed rows, old value to new value: national to rural 2,086;
   national to urban 2,108; rural to national 595; rural to urban 16.
-  The other 22,120 rows are unchanged. Affected are all open
+  The other 22,121 rows are unchanged. Affected are all open
   defecation (`s_ns_*`), all not emptied (`*_nemp_*`), and the sewer
   transport and containment variables.
 - The new column `residence_legacy` keeps the old values, so earlier
